@@ -1,0 +1,40 @@
+% Thesis Meta
+\degree{Doctor of Philosophy}
+\department{Physics}
+\gradyear{2018}
+\author{Philippe Joseph Berger}
+\title{Title Goes Here}
+
+% Avoiding huge ToC
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
+
+% More spacious tables
+\renewcommand{\arraystretch}{1.25}
+
+% For sub-figures w. multiple images
+\usepackage{subfig}
+
+% Swap commenting to turn on links in late versions
+\newcommand{\url}[1]{#1}
+%\usepackage{hyperref}
+
+% Fixes hyphens in math mode
+\mathchardef\myphen="2D
+
+% For filling in arrays
+\newcommand{\ndat}{\hspace*{\fill}---\hspace*{\fill}}
+
+% misc imports
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[square,nonamebreak,numbers]{natbib}
+\usepackage{aas_macros}
+\usepackage{booktabs}
+\usepackage{lmodern}
+\usepackage{graphicx}
+
+% Separate image directory
+\graphicspath{{./images/}}
