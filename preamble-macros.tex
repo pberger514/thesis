@@ -13,7 +13,9 @@
 \renewcommand{\arraystretch}{1.25}
 
 % For sub-figures w. multiple images
-\usepackage{subfig}
+%\usepackage{subfig}
+\usepackage{subcaption}
+\usepackage{caption}
 
 % Swap commenting to turn on links in late versions
 \newcommand{\url}[1]{#1}
@@ -35,6 +37,15 @@
 \usepackage{booktabs}
 \usepackage{lmodern}
 \usepackage{graphicx}
+
+%%%%% AUTHORS - PLACE YOUR OWN COMMANDS HERE %%%%%
+
+\newcommand{\RNum}[1]{\uppercase\expandafter{\romannumeral #1\relax}}
+
+\newcommand{\change}[1]{{\color{red}#1}}
+
+%m-mode commands
+\newcommand{\nh}{\hat{\mathbf{n}}}
 
 % Separate image directory
 \graphicspath{{./images/}}
