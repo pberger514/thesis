@@ -238,11 +238,141 @@ Figure \ref{cygasim} shows the results for Cygnus A, which we have simulated at 
 
 As one descends in flux of the primary source, the distribution of point sources in the surroundings will change from Poissonian to Gaussian. We have also simulated the two less bright sources, Perseus B, and 3C295, but these are still among the brightest sources in the sky, and so we do not observe deviations between the single point source cases at any level of interest for our observations. To address the question of the minimum flux of primary source permitted for an unbiased measurement of the beam we require an accurate model of the 26 m, which we leave for a later work.
 
-\section{Conclusion} \label{ch:hol:sec:conclusion}
+\section{Paper Conclusion} \label{ch:hol:sec:conclusion}
 
 In this document, we have described and validated our technique of radio holography of bright astronomical point sources for obtaining high signal-to-noise (S/N) measurements, with good angular resolution, of the two-dimensional primary beams of the CHIME Pathfinder array across its frequency band. We have reported our progress in equipping the John A. Galt 26 m telescope with custom instrumentation for the purpose, and displayed the output of the method for a preliminary data set of 7 sources of minimal depth. 
 
 It is clear from the data that more integration time is necessary for the low S/N sources to begin to measure the sidelobe structure seen in the best sources. From Figure \ref{full2dbeam} we see that the seven sources for which we have holography do not fully sample the two-dimensional structure in our model of the CHIME beams. The basic program is to use these holographic measurements to test and refine our beam models. Additionally, we plan to augment our holographic observations with additional sources which were not favorably located during the period these data were collected. However, our analysis of Section \ref{ch:hol:sec:sims} suggests that there is a minimum primary source flux at which one can expect to obtain a reasonable beam trace. In addition to the holography method presented here, we are pursing other methods of filling in the NS beam structure, notably with satellites\citep{hol2, sat2}, drones \citep{drone}, and pulsar holography. In its current form the data presented here serve as a basis for an understanding of the primary beam of a realistic cylindrical telescope array, such as CHIME and its Pathfinder.
+
+
+\section{Beam widths and centroids by source}
+
+Below we present the beam widths and centroids of Gaussian fits to the peaks of the averaged holography data from February-March 2016 (described in the SPIE proceedings). They are calculated by fitting a three parameter (FWHM, centroid, and amplitude) Gaussian to the peaks of the averaged slices for each source, as a function of hour angle. For the FWHM and centroids, we show four plots separated by cylinder and polarisation, each containing 6 panels for the 6 sources. Each panel is a function of frequency and position along the cylinder. This goal for this analysis is to validate the averaging procedure described in the proceedings and to gain some information in to the redundancy of the Pathfinder.
+
+\newpage
+
+\subsection{Beam widths}
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=.8\textwidth]{figures/hol_other/dd_width_Ecyl_Npol.png}
+\caption{The beam widths for the 6 sources, for the East cylinder and NS polarisation, as a function of frequency bin and position along the cylinder. White regions are flagged out in various ways during the averaging procedure (RFI frequency mask, by-hand bad channel mask, and bad Gaussian fits). The panels are ordered by decreasing declination, which is shown (rounded to an integer) in the subtitle of each plot. However, the distribution is not symmetric about zenith, with PerB at $3^{\circ}$ off zenith. In widths the cylinder appears very redundant at high declinations displaying the scaling with frequency and oscillation we expect, across the cylinder. However frequency-position structure appears at low declinations (curving features in the bottom right of VirA and HerA plots), most prominently at the south end.}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=.8\textwidth]{figures/hol_other/dd_width_Wcyl_Npol.png}
+\caption{The beam widths for the 6 sources, for the West cylinder and NS polarisation, as a function of frequency bin and position along the cylinder. White regions are flagged out in various ways during the averaging procedure (RFI frequency mask, by-hand bad channel mask, and bad Gaussian fits). The panels are ordered by decreasing declination, which is shown (rounded to an integer) in the subtitle of each plot. However, the distribution is not symmetric about zenith, with PerB at $3^{\circ}$ off zenith. \newline The results here mirror the East cylinder.}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=.8\textwidth]{figures/hol_other/dd_width_Ecyl_Epol.png}
+\caption{The beam widths for the 6 sources, for the East cylinder and EW polarisation, as a function of frequency bin and position along the cylinder. White regions are flagged out in various ways during the averaging procedure (RFI frequency mask, by-hand bad channel mask, and bad Gaussian fits). The panels are ordered by decreasing declination, which is shown (rounded to an integer) in the subtitle of each plot. However, the distribution is not symmetric about zenith, with PerB at $3^{\circ}$ off zenith. \newline At high declinations the EW polarisation shows the same scaling with frequency and oscillation we expect, as well as the slightly wider beams we expect, across the cylinder. At low declinations the same structure appears at the south end of the cylinders, although the rippling is faster.}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=.8\textwidth]{figures/hol_other/dd_width_Wcyl_Epol.png}
+\caption{The beam widths for the 6 sources, for the West cylinder and EW polarisation, as a function of frequency bin and position along the cylinder. White regions are flagged out in various ways during the averaging procedure (RFI frequency mask, by-hand bad channel mask, and bad Gaussian fits). The panels are ordered by decreasing declination, which is shown (rounded to an integer) in the subtitle of each plot. However, the distribution is not symmetric about zenith, with PerB at $3^{\circ}$ off zenith. \newline At high declinations the EW polarisation shows the same scaling with frequency and oscillation we expect, as well as the slightly wider beams we expect, across the cylinder. At low declinations the same structure appears at the south end of the cylinders, although the rippling is faster.}
+\end{center}
+\end{figure}
+
+\newpage
+
+\subsection{Centroids}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=.8\textwidth]{figures/hol_other/dd_cen_Ecyl_Npol.png}
+\caption{The centroids for the 6 sources, for the East cylinder and NS polarisation. White regions are flagged out in various way during the averaging procedure (RFI frequency mask, by-hand bad channel mask, and bad Gaussian fits). The median centroid of each 2D map of the non-flagged data has been removed, but is plotted in Fig. \ref{devmedcen}. The panels are ordered by decreasing declination, which is shown (rounded to an integer) in the subtitle of each plot. Notice the range of the color scale, corresponding to the oscillation in centroid, increases with declination. The large scale variation with feed position follows a sort of S shape, but which flattens with decreasing declination. A large blue (``more negative than expected") region moves off the map (to the north) with decreasing declination.}
+\label{cenEN}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=.8\textwidth]{figures/hol_other/dd_cen_Wcyl_Npol.png}
+\caption{The centroids for the 6 sources, for the West cylinder and NS polarisation. White regions are flagged out in various way during the averaging procedure (RFI frequency mask, by-hand bad channel mask, and bad Gaussian fits). The median centroid of each 2D map of the non-flagged data has been removed, but is plotted in Fig. \ref{devmedcen}. The panels are ordered by decreasing declination, which is shown (rounded to an integer) in the subtitle of each plot. Notice the range of the color scale, corresponding to the oscillation in centroid, increases with declination. \newline The large scale variation with feed position is relatively flat, except for a large blue (``more negative than expected") region at the center of the cylinder. The region moves left (to the north) with decreasing declination.}
+\label{cenWN}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=.8\textwidth]{figures/hol_other/dd_cen_Ecyl_Epol.png}
+\caption{The centroids for the 6 sources, for the East cylinder and EW polarisation. White regions are flagged out in various way during the averaging procedure (RFI frequency mask, by-hand bad channel mask, and bad Gaussian fits). The median centroid of each 2D map of the non-flagged data has been removed, but is plotted in Fig. \ref{devmedcen}. The panels are ordered by decreasing declination, which is shown (rounded to an integer) in the subtitle of each plot. Notice the range of the color scale, corresponding to the oscillation in centroid, increases with declination. \newline The large scale variation with feed position mirrors Fig. \ref{cenEN}, which is the same cylinder but other polarisation, but exhibits its own small scale fluctuation structure.}
+\label{cenEE}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=.8\textwidth]{figures/hol_other/dd_cen_Wcyl_Epol.png}
+\caption{The centroids for the 6 sources, for the West cylinder and EW polarisation. White regions are flagged out in various way during the averaging procedure (RFI frequency mask, by-hand bad channel mask, and bad Gaussian fits). The median centroid of each 2D map of the non-flagged data has been removed, but is plotted in Fig. \ref{devmedcen}. The panels are ordered by decreasing declination, which is shown (rounded to an integer) in the subtitle of each plot. Notice the range of the color scale, corresponding to the oscillation in centroid, increases with declination. 
+\newline The large scale variation with feed position mirrors its own cylinder other polarisation case (Fig. \ref{cenWN}), but has similar small scale fluctuation structure to the same polarisation of the East cylinder (Fig. \ref{cenEE}).}
+\label{cenWE}
+\end{center}
+\end{figure}
+
+\textbf{Summary:}
+
+In the centroids we observe large scale structure which is correlated with the cylinder and seemingly unpolarized, while the small scale position-frequency dependent oscillations seem to be polarisation dependent. We also see that the obvious large deviations in centroid in both cylinders move with declination, which could suggest the location of a large deviation on the cylinder's surface. See Figure \ref{unknown} for the relevant geometry. Seth and Emilie checked this and confirmed the geometry using a few bright point sources on Pathfinder data. Fig. \ref{confirm} confirms that the feature maps to a location on the cylinder in the holography data as well. Finally, we observe that the south end of the cylinder develops considerable position-frequency dependent structure (in both widths and centroids) with decreasing declination. A possible explanation for this could be related to the multi-bounce nature of the beams.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=.4\textwidth]{figures/hol_other/dev_med_cen.png}
+\end{center}
+\caption{The median centroids that were removed from the previous four plots (Figs. \ref{cenEN}, \ref{cenWN}, \ref{cenEE}, \ref{cenWE}), plotted against the expectation for a 1.9 degree rotated cylinder.}
+\label{devmedcen}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=.6\textwidth]{figures/hol_other/Unknown.png}
+\end{center}
+\caption{The geometry of the various bounces we expect to contribute to interference and therefore oscillatory features in frequency (image provided by Matt).}
+\label{unknown}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=.4\textwidth]{figures/hol_other/cyl_rescale.png}
+\end{center}
+\caption{The first panel of this figure shows the median centroid across frequency plotted against feed position for the EW polarisation on the West cylinder. This corresponds to a median in the vertical direction of the panels (sources/declinations) of Fig. \ref{cenWN} (but with the median of the whole 2D map restored). The bottom panel shows the same data rescaled to map to the location of the first bounce on a hypothetical infinite cylinder given the declination of the source.}
+\label{confirm}
+\end{figure}
+
+\section{Evidence for a multi-bounce model}
+
+Based on the geometry in Figure \ref{unknown}, the interference which sources the width oscillation could come from three major contributions, each of which would have a different lag/additional path length behavior with declination. In Figures \ref{feed10}, \ref{widthoscfit} and \ref{amposcfit}, we show evidence that it is the blue case which is contributing the most. Figure \ref{feed10} shows that the period of the width oscillation as a function of angle from zenith fits the additional path length geometry. Figures \ref{widthoscfit} and \ref{amposcfit} show that this behavior drops off towards the south end of the cylinder.
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=.5\textwidth]{figures/hol_other/width_osc_period_chid10.png}
+\caption{In blue is the period of a fit to the width oscillation in MHz for 5 different sources (3C295, PerB, TauA, VirA, HerA), as a function of their declinations (angle from zenith $\theta$ is decreasing along the x-axis). The green line corresponds to the prediction for the period based on the path length difference corresponding to the blue and green lines in Figure \ref{unknown}. This is for a single EW polarisation feed on the East cylinder.}
+\label{feed10}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=.6\textwidth]{figures/hol_other/width_osc_period_1d_eastcyl.png}
+\caption{The data explained in Figure \ref{feed10} is shown but now for all feeds on the East cylinder. The x-axis now shows position along the cylinder, while the colors show the different sources (in order or decreasing declination).}
+\label{widthoscfit}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=.6\textwidth]{figures/hol_other/width_osc_amplitude_1d_eastcyl.png}
+\caption{The same as Figure \ref{widthoscfit} but for the amplitude of the FWHM oscillation.}
+\label{amposcfit}
+\end{center}
+\end{figure}
+
+
 
 %\section{Acknowledgments}
 
