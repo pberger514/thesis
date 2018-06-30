@@ -6,8 +6,8 @@
 \title{Title Goes Here}
 
 % Avoiding huge ToC
-\setcounter{tocdepth}{3}
-\setcounter{secnumdepth}{3}
+%\setcounter{tocdepth}{3}
+%\setcounter{secnumdepth}{3}
 
 % More spacious tables
 \renewcommand{\arraystretch}{1.25}
@@ -19,7 +19,14 @@
 
 % Swap commenting to turn on links in late versions
 \newcommand{\url}[1]{#1}
-%\usepackage{hyperref}
+%\usepackage[]{hyperref}
+%\usepackage{xcolor}
+%\hypersetup{
+ %   colorlinks,
+ %   linkcolor={black!50!black},
+ %   citecolor={blue!50!black},
+ %   urlcolor={blue!80!black}
+%}
 
 % Fixes hyphens in math mode
 \mathchardef\myphen="2D
@@ -37,10 +44,15 @@
 \usepackage{booktabs}
 \usepackage{lmodern}
 \usepackage{graphicx}
+\usepackage{cancel}
 
 %%%%% AUTHORS - PLACE YOUR OWN COMMANDS HERE %%%%%
 
 \newcommand{\RNum}[1]{\uppercase\expandafter{\romannumeral #1\relax}}
+
+\newcommand{\RN}[1]{%
+  \textup{\uppercase\expandafter{\romannumeral#1}}%
+}
 
 \newcommand{\change}[1]{{\color{red}#1}}
 

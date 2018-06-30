@@ -199,7 +199,7 @@ Clearly the assumption of independent frequencies is inadequate. We would like t
 \left(\mathbf{A} \otimes \mathbf{I} + \mathbf{u}\mathbf{u}^\dagger \otimes \mathbf{H} \right)^{-1} = ~& \mathbf{A}^{-1} \otimes \mathbf{I} \label{PRODUCT}
 \\ &- \mathbf{A}^{-1}\mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1} \otimes \left(\mathbf{I} + \mathbf{u}^\dagger\mathbf{A}^{-1}\mathbf{u} \mathbf{H}\right)^{-1} \mathbf{H} \nonumber
 \end{align}
-(for a proof see Appendix \ref{ch:mm:sec:proof}), but we immediately encounter the standard issue that the signal and noise covariance matrices are diagonal in different bases.\footnote{Eq. \eqref{PRODUCT} solves the case of $\mathbf{G}=\mathbf{I}$, where $\mathbf{I}$ is the identity, but the case for general $\mathbf{G}$ can easily be solved by simply factoring it, assuming it is invertible, which simply modifies the definition of $\mathbf{H}$.} Even in the confusion limit, we can only expect this factorizability for on-sky quantities, which must then be tranformed into the data basis by multplication with beam transfer matrices. Considering the combined frequency and spatial coordinate matrices in block matrix form, this multiplication applies a smoothly varying function across the diagonal of the tensor product structure, forcing us to consider the full shape of the covariance matrix.
+(for a proof see Appendix \ref{app:mm:sec:proof}), but we immediately encounter the standard issue that the signal and noise covariance matrices are diagonal in different bases.\footnote{Eq. \eqref{PRODUCT} solves the case of $\mathbf{G}=\mathbf{I}$, where $\mathbf{I}$ is the identity, but the case for general $\mathbf{G}$ can easily be solved by simply factoring it, assuming it is invertible, which simply modifies the definition of $\mathbf{H}$.} Even in the confusion limit, we can only expect this factorizability for on-sky quantities, which must then be tranformed into the data basis by multplication with beam transfer matrices. Considering the combined frequency and spatial coordinate matrices in block matrix form, this multiplication applies a smoothly varying function across the diagonal of the tensor product structure, forcing us to consider the full shape of the covariance matrix.
 
 A simple solution is to enforce a smooth spectrum of the removed point source by performing a low-order polynomial fit to the point source estimated with a diagonal-in-frequency covariance matrix before removal. This method has been shown to be effective for the purpose of 21-cm intensity mapping by \cite{barry2016}. Alternatlively, due to the highly structured form of the covariance matrix, a conjugate gradient scheme for performing the full inversion -- with the results of this work as the initial guess -- could be feasible, although we leave this for later work.
 
@@ -211,39 +211,5 @@ We have shown that the $m$-mode formalism of \cite{mmodes1, mmodes2} is indeed c
 
 %We wish to thank T. Landecker for having (so quickly) reviewed and provided useful comments on the original manuscript. We also wish to thank N. T. Denman, L. Newburgh, and K. Vanderlinde for useful comments throughout. Finally, we would like to thank the anonymous reviewer for his/her comments which lead to the development of Section \ref{sec:freq}.  Computations were performed on the General Purpose Cluster supercomputer at the SciNet HPC Consortium. \citep{scinet} SciNet is funded by: the Canada Foundation for Innovation under the auspices of Compute Canada; the Government of Ontario; Ontario Research Fund - Research Excellence; and the University of Toronto.
 
-\appendix
-\section{Proof of equation (\ref{PRODUCT})} 
-\label{ch:mm:sec:proof}
-
-We can show Eq. \eqref{PRODUCT} by direct multiplication,
-\begin{align}
-&\left(\mathbf{A} \otimes \mathbf{I} + \mathbf{u}\mathbf{u}^\dagger \otimes \mathbf{H} \right) 
- \left( \mathbf{A}^{-1} \otimes \mathbf{I} - \mathbf{A}^{-1}\mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1} \otimes \left(\mathbf{I} + \mathbf{u}^\dagger\mathbf{A}^{-1}\mathbf{u} \mathbf{H}\right)^{-1} \mathbf{H} \right)
- \nonumber \\
- &= \mathbf{I} \otimes \mathbf{I} + \mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1} \otimes \mathbf{H} - \mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1}\otimes \left(\mathbf{I} + \mathbf{u}^\dagger\mathbf{A}^{-1}\mathbf{u} \mathbf{H}\right)^{-1} \mathbf{H}
-\nonumber \\
-&~- \mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1}\mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1}\otimes \mathbf{H} \left(\mathbf{I} + \mathbf{u}^\dagger\mathbf{A}^{-1}\mathbf{u} \mathbf{H}\right)^{-1} \mathbf{H}. \label{A1}
-\end{align}
-The product on the last line of Eq. \eqref{A1} has formed a scalar, which can be brought through the tensor product,
-\begin{align}
-&= \mathbf{I} \otimes \mathbf{I} + \mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1} \otimes \mathbf{H} - \mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1}\otimes \left(\mathbf{I} + \mathbf{u}^\dagger\mathbf{A}^{-1}\mathbf{u} \mathbf{H}\right)^{-1} \mathbf{H}
-\nonumber \\
-&~- \mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1}\otimes \mathbf{u}^\dagger\mathbf{A}^{-1}\mathbf{u}\mathbf{H} \left(\mathbf{I} + \mathbf{u}^\dagger\mathbf{A}^{-1}\mathbf{u}\mathbf{H}\right)^{-1} \mathbf{H}. 
-\end{align}
-The last two terms can then be factored,
-\begin{align}
-=& \mathbf{I} \otimes \mathbf{I} + \mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1} \otimes \mathbf{H} 
-\\ \nonumber &- \left( \mathbf{I} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{u}^\dagger\mathbf{A}^{-1}\mathbf{u} \mathbf{H}\right)
- \left( \mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1} \otimes \left(\mathbf{I} + \mathbf{u}^\dagger\mathbf{A}^{-1}\mathbf{u}\mathbf{H}\right)^{-1} \mathbf{H}\right)
-\\ =& \mathbf{I} \otimes \mathbf{I} + \mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1} \otimes \mathbf{H} 
-\\ \nonumber &- \left( \mathbf{I} \otimes \mathbf{I} + \mathbf{u}^\dagger\mathbf{A}^{-1}\mathbf{u} \mathbf{H} \right)
- \left( \mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1} \otimes \left(\mathbf{I} + \mathbf{u}^\dagger\mathbf{A}^{-1}\mathbf{u}\mathbf{H}\right)^{-1} \mathbf{H}\right).
- \end{align}
- Multiplying through we obtain
- \begin{align}
- =& \mathbf{I} \otimes \mathbf{I} + \mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1} \otimes \mathbf{H} \nonumber 
-\\ &- \mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1} \otimes \mathbf{H}.
-\end{align}
-The result can similarly be shown for multiplication on the left.
 
 

@@ -1,0 +1,222 @@
+\appendix
+
+
+\chapter{Appendices to Chapter \ref{chap:signal}}
+
+Peak Patch stuff.
+
+\chapter{Appendices to Chapter \ref{chap:hol}}
+
+\section{Noise in interferometers}
+\label{app:hol:sec:noise}
+
+\section{Simple baseline-based calculation} 
+\label{app:hol:sec:noise:ss:basecalc}
+
+Here we present an analytic analysis of the noise in interferometers in the presence of cross talk. To gain some intution into the kinds of operations we are dealing with we will first perform the standard calculation with no cross talk, which is heavily based on Ref. \citep{kulkarni}. We begin with a simple model for the voltages obtained at the correlator, which assumes that the received electric field is a just a scalar, and that we observe a simple sum of this signal and thermal noise fluctuations. After the Fourier transform stage of the correlator we have
+\begin{equation}
+\overline{E}_i(\nu) = E_i(\nu)+ n_i(\nu),
+\end{equation}
+where overbars denote observed quantities. In this section (\ref{app:hol:sec:noise:ss:basecalc}) and the following (\ref{app:hol:sec:noise:ss:basecalcx}), we will neglect any correlations between frequencies or times and so will drop any explicit reference. We are therefore interested only in how the various baselines interact at any one frequency or time. In Section \ref{app:hol:sec:noise:ss:fullcalc} and \ref{app:hol:sec:noise:ss:fullcalcx} we will notice that even the signal component of the data is made up of delayed signals with path differences set by the baselines.
+\subsection{Signal}
+First, we can construct the two point function of $\overline{E}_i$, the observed visibilities
+\begin{align}
+\overline{V}_{ij} \equiv \left\langle \overline{E}_i \overline{E}_j^* \right\rangle &= \left\langle (E_i + n_i)(E_j + n_j)^* \right\rangle = \left\langle E_iE_j^* + E_in_j^* + n_iE_j^* + n_in_j^*\right\rangle \nonumber \\ 
+&= \left\langle E_iE_j^* \right\rangle + \cancel{\left\langle E_in_j^* \right\rangle} + \cancel{\left\langle n_iE_j^*\right\rangle} +\left\langle n_in_j^* \right\rangle
+\nonumber \\ 
+&= V_{ij} + \delta_{ij} N, \label{obsvis}
+\end{align}
+where N is the noise equivalent flux density (NEFD), related to the system temperature through $N=\frac{1}{2}kT_{\rm sys} / \eta A$. This is the well-known result that diagonal components of the observed visibility triangle, the auto-correlations, receive a contribution to the signal from the system temperature. Conversely for the off-diagonals, the cross-correlations, the noise fluctuations at various antennas do not correlate, and the received signal level is therefore unbiased.
+\subsection{Covariance}
+Next, we would like to understand how the signal and noise contribute to the fluctuation power in the visibilities themselves, keeping in mind that the visibilities are actually a two-point function of the voltages. To do so, we should compute the full covariance of the visibilities, which for the fringe amplitude is given by
+\begin{equation}
+{\rm Cov}(\overline{V}_{ij}, \overline{V}_{i'j'}) \equiv \left\langle \overline{E}_i \overline{E}_j^*(\overline{E}_{i'} \overline{E}_{j'}^*)^* \right\rangle  -  \left\langle \overline{E}_i \overline{E}_j^* \right\rangle \left\langle \overline{E}_{i'} \overline{E}_{j'}^* \right\rangle^*  = \left\langle \overline{E}_i \overline{E}_j^* \overline{E}_{i'}^* \overline{E}_{j'} \right\rangle - \left\langle \overline{E}_i \overline{E}_j^* \right\rangle \left\langle \overline{E}_{i'}^* \overline{E}_{j'} \right\rangle. \label{fullcov}
+\end{equation} 
+To gain some more information we can then consider only its diagonal ($i=i', j=j'$) component, the variance of that visibility. Performing the Wick expansion of Eq. \ref{fullcov} greatly simplifies the expansion,
+\begin{align}
+\left\langle \overline{E}_i \overline{E}_j^* \overline{E}_{i'}^* \overline{E}_{j'} \right\rangle 
+&= \left\langle \overline{E}_i \overline{E}_j^* \right\rangle\left\langle \overline{E}_{i'}^* \overline{E}_{j'} \right\rangle  
++ \left\langle \overline{E}_i \overline{E}_{i'}^* \right\rangle\left\langle \overline{E}_{j}^* \overline{E}_{j'} \right\rangle  
++ \cancel{\left\langle \overline{E}_i \overline{E}_{j'} \right\rangle\left\langle\overline{E}_{j}^* \overline{E}_{i'}^* \right\rangle}  - \left\langle \overline{E}_i \overline{E}_j^* \right\rangle \left\langle \overline{E}_{i'}^* \overline{E}_{j'} \right\rangle.
+\nonumber \\ & = \left\langle \overline{E}_i \overline{E}_{i'}^* \right\rangle\left\langle \overline{E}_{j}^* \overline{E}_{j'} \right\rangle  \label{wickexpansion}
+\end{align}
+A simple way of understanding why the second to last term on the first line should be zero is to consider a pure Fourier mode $\cos{\frac{2\pi}{T} t} + i \sin{\frac{2\pi}{T} t}$ and average over its period. Eq. \ref{wickexpansion} can then be expressed in terms of products of observed visibilities, but note the permutation of the indices
+\begin{align}
+{\rm Cov}(\overline{V}_{ij}, \overline{V}_{i'j'}) &= \overline{V}_{ii'}\overline{V}_{jj'}^*  \label{fullcov-obsvis}
+\\ & = (V_{ii'} + \delta_{ii'} N)(V_{jj'} + \delta_{jj'} N)^*
+\end{align}
+To understand this expression further, we can inspect various cases for the elements of the covariance. For example, we take the diagonal component $(i=i', j=j')$ component to obtain the variance of each baseline.
+\begin{align}
+\sigma^2_{ij} = (S + N)_{i}(S + N)^*_{j},
+\end{align}
+where $S$ is now the flux of the source. We have obtained the (again well known) result that variance in the visibilities stems from the square of the antenna and system temperatures at the feeds in question. Futher, for the non-diagonal elements, there are two more cases of interest (which exhaust the possible shapes in the covariance): the $(i=i', j\neq j')$ case, where a single feed is shared between the two cross correlations we are considering, and the $(i\neq i', j\neq j')$, where no feeds are shared. In these cases we have
+\begin{align}
+(i=i', j\neq j') &\rightarrow (S + N)_{i} V_{jj'},
+\\{\rm and~}(i\neq i', j\neq j') &\rightarrow V_{ii'} V^{*}_{jj'}.
+\end{align}
+The take home message here is that for the non-diagonal elements, the covariance drops since the noise no longer correlates, and also by the cross-correlation coefficient, that depends on the correlation properties of the source in question and its signal-to-noise.
+
+\section{Cross-talk talk between baselines} 
+\label{app:hol:sec:noise:ss:basecalcx}
+
+We would now like to gain some intuition into the kinds of terms that cross-talk can introduce. After the Fourier transform we have,
+\begin{equation}
+\overline{E}_i = E_i + n_i + \sum_{k} \alpha_{ik} (E_i + n_i) {\rm e}^{2\pi i \tau_{ik}}. \label{pre-xtalkmodel}
+\end{equation}
+We have extended the model to include attenuated and delayed versions of the voltages at each other antenna, which depend on the $N_{\rm feed}(N_{\rm feed} + 1)/2$ on attenuation parameters $\alpha_{ik}$ and the $N_{\rm feed}(N_{\rm feed} + 1)/2$ delays $\tau_{ik}$. This seems like a reasonable model -- assuming that the digitized noisy voltages you would have received without cross-talk become delayed and attenuated. However consider the analog chain, there's no reason thermal noise inside some cable can't combine with the signal to reflect off a mismatched impedance and be rebroadcasted before reaching the correlator. This logic would lead to quite a complicated model, though, with delays and parameters for each component that could be contributing noise. For now let's consider a model where we allow different attenuation parameters for the rebroadcasted signal and noise one for each antenna's complete analog chain,
+\begin{align}
+\overline{E}_i = E_i + n_i + \sum_{k} \alpha_{ik} E_i {\rm e}^{2\pi i \tau_{\alpha,ik}} + \sum_{k} \beta_{ik} n_i {\rm e}^{2\pi i \tau_{\beta,ik}}. \label{xtalkmodel}
+\end{align}
+In practice, any response of the interferometer to actual sky signal is measured by holography. Furthermore, one expects the average of the signal over the entire sky (as well as the first few modes) to be small. Bright sources such as the galaxy or point sources only occupy small regions, and so their flux should average down over large, mostly dark, sky areas. This is in contrast to the extremely bright striping features that we observe in ring maps, which do not average down over a day, and oscillate slowly. It's therefore reasonable to assume that the cross-talk coupling parameters measured from the striping in ring maps are in fact the $\beta$ parameters. In the following therefore, while $\tau_\beta$ and $\tau_\alpha$ are in general distinct we will simplify notation, while keeping in mind that it is the $\tau_\beta$'s we are interested in.
+
+\subsection{Signal}
+We can compute the modification to the visibilities by cross-talk by following the calculation in Eq. \ref{obsvis} but now inserting Eq. \ref{xtalkmodel}. We work to linear order in the attenuation parameters. For simplicity we also define $\omega_{ij} \equiv 2\pi i \tau_{ij}$. We obtain
+\begin{align}
+\overline{V}_{ij} = &~ V_{ij} + \delta_{ij} N
+\nonumber \\
+&+ \sum_k \alpha_{ik} V_{kj} {\rm e}^{\omega_{ik}} + \sum_l \alpha^*_{jl} V_{il} {\rm e}^{-\omega_{jl}}
+\nonumber \\
+&+ \beta_{ij} N e^{\omega_{ji}} + \beta_{ji}^*N e^{- \omega_{ji}}
+\label{xtalk-signal} \\ \nonumber
+\equiv &~ V_{ij} + \delta_{ij} N
+\\ \nonumber &+ \widetilde{V}_{ij}
+\\ &+ \widetilde{N}_{ij}. \label{tilde-def}
+\end{align}
+There are two new contributions to Equation \ref{xtalk-signal}, which we have tentatively denoted with tildes to mean ``delayed versions'' of the visibilities and noise, $\widetilde{V}_{ij}$ and $\widetilde{N}_{ij}$, respectively. The first is the addition of delayed and attenuated versions of the visibilities, which for any pair of feeds in the correlation triangle, is a sum over all of their cross-correlations. Secondly we see that in the presence of cross-talk, even cross-correlations can receive a biasing contribution from the system temperature, which results from a feed's own thermal noise fluctuations being broadcast to the others, for later correlation.
+
+\subsection{Covariance}
+Referring back to Eq. \ref{fullcov-obsvis}, the full covariance of the visibilities can be expressed as a product of the observed visibilities (but with permuted indices),
+\begin{align}
+{\rm Cov}(\overline{V}_{ij}, \overline{V}_{i'j'}) =& \overline{V}_{ii'}\overline{V}_{jj'}^* \label{fullcov-obsvis-xtalk}
+\\ =& (V_{ii'} + \delta_{ii'}N + \widetilde{V}_{ii'} + \widetilde{N}_{ii'})(V_{jj'} + \delta_{jj'}N + \widetilde{V}_{jj'} + \widetilde{N}_{jj'})^* 
+\\ \simeq &(V_{ii'} + \delta_{ii'}N)(V_{jj'} + \delta_{jj'}N)^*  
+\nonumber \\ &+ (V_{ii'} + \delta_{ii'}N)(\widetilde{V}_{jj'} + \widetilde{N}_{jj'})^* + (\widetilde{V}_{ii'} + \widetilde{N}_{ii'})(V_{jj'} + \delta_{jj'}N)^*
+\label{fullcov-xtalk-expand} \\ &\equiv C^{\rm I}_{ij, i'j'} + C^{\rm X}_{ij, i'j'}
+\end{align}
+where for the equality \ref{fullcov-xtalk-expand} we have expanded to linear order in the attenuation parameters, and in the last line we have defined the covariance matrix of an ideal interferometer $C^{\rm I}$ and the contribution due to cross-talk $C^{\rm X}$. We can again gain some information by looking at the various possibilities for the entries of this matrix, however now we will concentrate on the cross-talk contributions. For the diagonal components we obtain
+\begin{align}
+(\sigma^{\rm X}_{ij})^2 = (S + N)_{i}(\widetilde{V}_{jj} + \widetilde{N}_{jj})^* + (\widetilde{V}_{ii} + \widetilde{N}_{ii})(S + N)_{j}.
+\end{align}
+The cross-talk contribution to the variance depends on the auto of the cross-talk contributions to the visibilities. Referring to Eq. \ref{tilde-def} these are given by
+\begin{align}
+\widetilde{V}_{ii} &= \sum_k \alpha_{ik} V_{ki} {\rm e}^{\omega_{ik}} + \sum_l \alpha^*_{il} V_{il} {\rm e}^{-\omega_{il}},
+\\ \widetilde{N}_{ii} &= \beta_{ii} N e^{\omega_{ii}} + \beta_{ii}^*N e^{- \omega_{ii}},
+\nonumber \\ &= \beta_{ii}N \left( e^{\omega_{ii}} + e^{- \omega_{ii}} \right),
+\\ & = \beta_{ii}N 2i \sin{\left( 2\pi \tau_{ii} \right)}.
+\end{align}
+The signal contribution is complicated, but the auto term is simplified by having only one feed receiving delayed contributions instead of two. The noise contribution depends on the $\tau_ii$ parameter, which represents the posibility that a feed's own noise is delayed and correlated with the original version. The off diagonal terms become
+\begin{align}
+(i=i', j\neq j') &\rightarrow (S + N)_{i} (\widetilde{V}_{jj'} + \widetilde{N}_{jj'})^* +  (\widetilde{V}_{ii} + \widetilde{N}_{ii})V^*_{jj'} ,
+\\{\rm and~}(i\neq i', j\neq j') &\rightarrow V_{ii'}(\widetilde{V}_{jj'} + \widetilde{N}_{jj'})^* +  (\widetilde{V}_{ii'} + \widetilde{N}_{ii'})V^*_{jj'}.
+\end{align}
+%The first term $\RN{1}$ contains the standard correlated contribution to the covariance, plus products of cross-talk and either signal or noise terms. Still working to linear order in the $\alpha$s
+%\begin{subequations}
+%\begin{align}
+%\RN{1} = &~ (V_{ij} + \delta_{ij}T_{\rm sys} + \widetilde{V}_{ij} + \widetilde{N}_{ij})(V_{i'j'} + \delta_{i'j'}T_{\rm sys} + \widetilde{V}_{i'j'} + \widetilde{N}_{i'j'})^*
+%\label{xtalk-expansion-1-a}  \\
+% = &~  (V_{ij} + \delta_{ij}T_{\rm sys})(V_{i'j'} + \delta_{i'j'}T_{\rm sys})^*
+% \label{xtalk-expansion-1-b} 
+%\\ &+ V_{ij}\widetilde{V}^*_{i'j'} + \widetilde{V}_{ij}V^*_{i'j'}
+%\label{xtalk-expansion-1-c} 
+%\\ &+ V_{ij}\widetilde{N}^*_{i'j'} + \widetilde{N}_{ij}V^*_{i'j'}
+%\label{xtalk-expansion-1-d}
+%\\ &+ \delta_{ij}T_{\rm sys}\widetilde{V}^*_{i'j'} + \widetilde{V}_{ij}\delta_{i'j'}T_{\rm sys}
+%\label{xtalk-expansion-1-e}
+%\\ &+ \delta_{ij}T_{\rm sys}\widetilde{N}^*_{i'j'} + \widetilde{N}_{ij}\delta_{i'j'}T_{\rm sys} \label{xtalk-expansion-1-f}
+%\end{align}  
+%\end{subequations}
+%Now taking the $i=i'$ and $j=j'$ component, the terms in \ref{xtalk-expansion-1-c} and \ref{xtalk-expansion-1-d} just multiply. However, the Kroenecker deltas in \ref{xtalk-expansion-1-e} and \ref{xtalk-expansion-1-f} pick out the diagonal components of the matrices they multiply. We thus obtain, for example for the first signal-like term,
+%\begin{align}
+%\delta_{ij}T_{\rm sys}\widetilde{V}^*_{i'j'}  &=  \delta_{ij}T_{\rm sys}\left(  \sum_{k'} \alpha^*_{i'k'} V^*_{k'j'} {\rm e}^{-\omega_{i'k'}} + \sum_{l'} \alpha_{j'l'} V^*_{i'l'} {\rm e}^{\omega_{j'l'}} \right)
+%\nonumber \\
+%&\rightarrow \delta_{ij}T_{\rm sys}\left(  \sum_{k'} \alpha^*_{ik'} V^*_{k'i} {\rm e}^{-\omega_{ik'}} + \sum_{l'} \alpha_{il'} V^*_{il'} {\rm e}^{\omega_{il'}} \right) = \delta_{ij} T_{\rm sys} \widetilde{V}^*_{ii} \equiv \delta_{ij} T_{\rm sys} \widetilde{T}_{{\rm A}, i}, \label{defAtilde}
+%\end{align}
+%and for the first noise-like term,
+%\begin{align}
+%\delta_{ij}T_{\rm sys}\widetilde{N}^*_{i'j'} \rightarrow \delta_{ij}T_{\rm sys}^2 \left( \alpha_{ii} {\rm e}^{\omega_{ii}} + \alpha_{ii}^*{\rm e}^{-\omega_{ii}}\right) \equiv \delta_{ij}T_{\rm sys} \widetilde{T}_{{\rm sys}, i}^*. \label{defNtilde}
+%\end{align}
+%In Eqs. \ref{defAtilde} and \ref{defNtilde}, we have defined the antenna and system temperatures due to cross-talk, $\widetilde{T}_{{\rm A}, i}$ and $\widetilde{T}_{{\rm sys}, i}$.
+%We proceed similarly for the second term $\RN{2}$, which, we saw in Section \ref{basecalc}, usually contains the antenna-by-antenna contribution. The expansion is identical to Eqs. \ref{xtalk-expansion-1-b} - \ref{xtalk-expansion-1-f}, but with the indices apropriately permuted. We obtain
+%\begin{subequations}
+%\begin{align}
+%\RN{2} = &~ (V_{ii'} + \delta_{ii'}T_{\rm sys} + \widetilde{V}_{ii'} + \widetilde{N}_{ii'})(V_{jj'} + \delta_{jj'}T_{\rm sys} + \widetilde{V}_{jj'} + \widetilde{N}_{jj'})^*
+%\\ = &~  (V_{ii'} + \delta_{ii'}T_{\rm sys})(V_{jj'} + \delta_{jj'}T_{\rm sys})^*
+%\\ &+ V_{ii'}\widetilde{V}^*_{jj'} + V_{ii'}\widetilde{N}^*_{jj'} + \delta_{ii'}T_{\rm sys}\widetilde{V}^*_{jj'} +  \widetilde{N}_{ii'}\delta_{jj'}T_{\rm sys} + h.c.
+%\\ \rightarrow &~ (T_{\rm A} + T_{\rm sys})_i(T_{\rm A} + T_{\rm sys})_j^*
+%\\ &+  T_{{\rm A}, i}\widetilde{T}_{{\rm A}, j}^*+ T_{{\rm A}, i}\widetilde{T}_{{\rm sys}, j}^* +  T_{{\rm sys}, i}\widetilde{T}_{{\rm A}, j}^* + T_{{\rm sys}, i}\widetilde{T}_{{\rm sys}, j}^* +  h.c.
+%\end{align}
+%\end{subequations}
+%Collecting, we obtain the final results for the data covariance matrix of the visibilities in the presence of cross-talk
+%\begin{align}
+%C_{ij,i'j'} = &~ C^S_{ij,i'j'} + C^N_{ij,i'j'} + C^X_{ij,i'j'}
+%\nonumber \\ = &~  (V_{ij} + \delta_{ij}T_{\rm sys})(V_{i'j'} + \delta_{i'j'}T_{\rm sys})^* + (V_{ii'} + \delta_{ii'}T_{\rm sys})(V_{jj'} + \delta_{jj'}T_{\rm sys})^*
+%\nonumber \\ &+ V_{ij}\widetilde{V}^*_{i'j'} + V_{ij}\widetilde{N}^*_{i'j'} + \delta_{ij}T_{\rm sys}\widetilde{V}^*_{i'j'} +  \widetilde{N}_{ij}\delta_{i'j'}T_{\rm sys} + h.c.
+%\nonumber \\ &+ V_{ii'}\widetilde{V}^*_{jj'} + V_{ii'}\widetilde{N}^*_{jj'} + \delta_{ii'}T_{\rm sys}\widetilde{V}^*_{jj'} +  \widetilde{N}_{ii'}\delta_{jj'}T_{\rm sys} + h.c.
+%\end{align}
+%and for the variance
+%\begin{align}
+%\sigma^2_{ij} = &~ \sigma^2_{S, ij} + \sigma^2_{N,ij} + \sigma^2_{X,ij}
+%\\ = &~ (V_{ij} + \delta_{ij}T_{\rm sys})(V_{ij} + \delta_{ij}T_{\rm sys})^* + (T_{\rm A} + T_{\rm sys})_i(T_{\rm A} + T_{\rm sys})_j^*
+%\\ &+ V_{ij}\widetilde{V}^*_{ij} + V_{ij}\widetilde{N}^*_{i'j'} + \delta_{ij}T_{\rm sys} \widetilde{T}_{{\rm A}, i}^* + \delta_{ij}T_{\rm sys} \widetilde{T}_{{\rm sys}, i}^* + h.c.
+%\\ &+  T_{{\rm A}, i}\widetilde{T}_{{\rm A}, j}^*+ T_{{\rm A}, i}\widetilde{T}_{{\rm sys}, j}^* + T_{{\rm sys}, i}\widetilde{T}_{{\rm A}, j}^* + T_{{\rm sys}, i}\widetilde{T}_{{\rm sys}, j}^* +  h.c.
+%\end{align}
+
+\section{Standard m-mode calculation}
+\label{app:hol:sec:noise:ss:fullcalc}
+In order to understand the full structure of the covariance matrix we must take into account the fact the voltage measured at some feed $i$, 
+\begin{equation}
+E_i(\nu ) =  \int d^2\hat{n}~E(\hat{n}, \nu)  {\rm e}^{2\pi i \hat{n}\cdot \vec{b}_{i}(\phi)},
+\end{equation}
+correlates with that measured at some other feed $j$, only when the same electric field signal arrives there as well
+\begin{equation}
+\left\langle E(\hat{n}, \nu) E(\hat{n}', \nu') \right\rangle \propto \delta(\hat{n} - \hat{n}') \delta(\nu - \nu') T(\hat{n}, \nu).
+\end{equation}
+This gives the result for the signal covariance that
+\begin{equation}
+\left\langle V_{ij}V^*_{i'j'} \right\rangle = B^\nu_{ij, \ell m} \left\langle a^{\nu}_{\ell m} a^{*\nu'}_{l'm'} \right\rangle B^{*\nu'}_{\ell'm', i'j'} = \delta_{mm'}\delta_{\ell \ell'} C_{\ell}(\nu, \nu'),
+\end{equation}
+The $\ell m$ structure of the covariance matrix depends on the sky statistics, but is diagonal for a Gaussian random field. 
+\section{$m$-mode calculation with cross-talk} 
+\label{app:hol:sec:noise:ss:fullcalcx}
+\begin{align}
+\left\langle \widetilde{V}_{ij} V^*_{i'j'} \right\rangle &= \sum_k \alpha_{ik} {\rm e}^{\omega_{ik}} B^\nu_{kj, \ell m} \left\langle a^{\nu}_{\ell m} a^{*\nu'}_{l'm'} \right\rangle B^{*\nu'}_{\ell'm', i'j'}
++ \sum_l \alpha^*_{jl} {\rm e}^{-\omega_{jl}} B^\nu_{il, \ell m} \left\langle a^{\nu}_{\ell m} a^{*\nu'}_{l'm'} \right\rangle B^{*\nu'}_{\ell'm', i'j'}
+\end{align}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Appendices to Chapter \ref{chap:mapmaking}}
+
+\section{Proof of equation (\ref{PRODUCT})} 
+\label{app:mm:sec:proof}
+
+We can show Eq. \eqref{PRODUCT} by direct multiplication,
+\begin{align}
+&\left(\mathbf{A} \otimes \mathbf{I} + \mathbf{u}\mathbf{u}^\dagger \otimes \mathbf{H} \right) 
+ \left( \mathbf{A}^{-1} \otimes \mathbf{I} - \mathbf{A}^{-1}\mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1} \otimes \left(\mathbf{I} + \mathbf{u}^\dagger\mathbf{A}^{-1}\mathbf{u} \mathbf{H}\right)^{-1} \mathbf{H} \right)
+ \nonumber \\
+ &= \mathbf{I} \otimes \mathbf{I} + \mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1} \otimes \mathbf{H} - \mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1}\otimes \left(\mathbf{I} + \mathbf{u}^\dagger\mathbf{A}^{-1}\mathbf{u} \mathbf{H}\right)^{-1} \mathbf{H}
+\nonumber \\
+&~- \mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1}\mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1}\otimes \mathbf{H} \left(\mathbf{I} + \mathbf{u}^\dagger\mathbf{A}^{-1}\mathbf{u} \mathbf{H}\right)^{-1} \mathbf{H}. \label{A1}
+\end{align}
+The product on the last line of Eq. \eqref{A1} has formed a scalar, which can be brought through the tensor product,
+\begin{align}
+&= \mathbf{I} \otimes \mathbf{I} + \mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1} \otimes \mathbf{H} - \mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1}\otimes \left(\mathbf{I} + \mathbf{u}^\dagger\mathbf{A}^{-1}\mathbf{u} \mathbf{H}\right)^{-1} \mathbf{H}
+\nonumber \\
+&~- \mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1}\otimes \mathbf{u}^\dagger\mathbf{A}^{-1}\mathbf{u}\mathbf{H} \left(\mathbf{I} + \mathbf{u}^\dagger\mathbf{A}^{-1}\mathbf{u}\mathbf{H}\right)^{-1} \mathbf{H}. 
+\end{align}
+The last two terms can then be factored,
+\begin{align}
+=& \mathbf{I} \otimes \mathbf{I} + \mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1} \otimes \mathbf{H} 
+\\ \nonumber &- \left( \mathbf{I} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{u}^\dagger\mathbf{A}^{-1}\mathbf{u} \mathbf{H}\right)
+ \left( \mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1} \otimes \left(\mathbf{I} + \mathbf{u}^\dagger\mathbf{A}^{-1}\mathbf{u}\mathbf{H}\right)^{-1} \mathbf{H}\right)
+\\ =& \mathbf{I} \otimes \mathbf{I} + \mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1} \otimes \mathbf{H} 
+\\ \nonumber &- \left( \mathbf{I} \otimes \mathbf{I} + \mathbf{u}^\dagger\mathbf{A}^{-1}\mathbf{u} \mathbf{H} \right)
+ \left( \mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1} \otimes \left(\mathbf{I} + \mathbf{u}^\dagger\mathbf{A}^{-1}\mathbf{u}\mathbf{H}\right)^{-1} \mathbf{H}\right).
+ \end{align}
+ Multiplying through we obtain
+ \begin{align}
+ =& \mathbf{I} \otimes \mathbf{I} + \mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1} \otimes \mathbf{H} \nonumber 
+\\ &- \mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1} \otimes \mathbf{H}.
+\end{align}
+The result can similarly be shown for multiplication on the left.
