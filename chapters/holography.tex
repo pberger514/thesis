@@ -372,11 +372,216 @@ Based on the geometry in Figure \ref{unknown}, the interference which sources th
 \end{center}
 \end{figure}
 
+\section{Strange Structure in the EW polarization beam}
+
+During the Dec 2015 group meeting, an interesting point was raised that the FWHM from the sliced beam profiles from Seth's ring maps don't match the holographic FWHM. In particular, in EW polarisation the holographic data had a much larger amplitude of oscillation in FWHM at low frequencies. Furthermore at low frequency, the minima of the oscillation had an offset causing them to dip below the $1/\lambda$ trend and the map slices.
+
+We investigated the source of this discrepancy and found that it was both a real and consistent beam artifact, and that it was being averaged out in Seth's ring maps. Seth provided fits to CygA profiles with EW and NS polarisations split, and these results can be obtained by beam forming the holography beams. Specifically, the beam artifact is that at particular frequencies near the FWHM peaks, the beams become either flat or double-humped. This is very clear in the holographic data, and also clear in the autocorrelations with less S/N. These beam artifacts are present for CygA (declination 40.7) and CasA (declination 58.8), but not for VirA (declination 12.4).
+
+\section{Holography-CHIME comparison}\label{hol-chime}
+\begin{figure}[h!]
+\includegraphics[width=\textwidth]{figures/hol_other/width_holautos.png}
+\caption[LoF entry]{This figure displays the general width oscillation effect in a CygA scan, for the EW polarisation of a feed near the middle of the West Cylinder. The Gaussian fit FWHM for holography and CHIME autocorrelations are shown in the top panel. The corresponding zoomed-in transits in the low FWHM region (purple) and high FWHM region (red) for holography scans are bottom left and autos are bottom right.
+
+In frequency bins 880-895 (purple) the scans have a clear Gaussian profile, however in frequency bins 905-925 (red), the profile becomes quite flat. Along with the flattening is a loss in forward gain, although the general trend is still an increase in gain with wavelength. This flatness is seen in both the holographic and auto data, and because it is occurs at specific frequencies is unlikely to be galactic in nature.
+
+The galaxy does, however, provide a significant slope across the transit of CygA, which complicates the fit to the autos. There's still an overall good agreement in widths between holography and autos, for example in the highlighted region.
+
+The x-axis of the bottom two plots is the raw hour angle in degrees.}
+\label{width_holautos}
+\end{figure} 
 
 
-%\section{Acknowledgments}
+\begin{figure}[h!]
+\includegraphics[width=\textwidth]{figures/hol_other/double_hump_holautos.png}
+\caption[LoF entry]{This figure is the same channel and scan of CygA as Fig. \ref{hol-chime}, but concentrates on the frequencies at the minima and maxima of the oscillation: frequency bin 940 - 955 is the last minimum of the FWHM oscillation and shows a nice Gaussian profile in both the holographic data (left) and auto data (right). Frequency bin 920 - 930 is the second to last maximum, and shows a strange profile in both the holographic and auto scans. One can see both a flattening in the first blue frequency, developing to a double hump for the last red frequency.
 
-%We are grateful for the unflagging helpfulness of the DRAO staff and would like to particularly acknowledge Ev Sheehan, Rob Messing, Andrew Gray, and Kory Phillips for helpful discussions, use of the John A. Galt Telescope, and contributing valuable time in support of these observations.
+The x-axis is raw hour angle in degrees.}\label{double_hump}
+\label{width_holautos}
+\end{figure} 
 
-%We acknowledge support from the Canada Foundation for Innovation, the Natural Sciences and Engineering Research Council of Canada, the B.C. Knowledge Development Fund, le Cofinancement gouvernement du Qu\'ebec-FCI, the Ontario Research Fund, the CIfAR Cosmology and Gravity program, the Canada Research Chairs program, and the National Research Council of Canada.
+\begin{figure}[h!]
+\includegraphics[width=\textwidth]{figures/hol_other/fit_display.png}
+\caption{The progression of the flattening effect with frequency. It occurs to some extent in all of the peaks of the lower half of the band. The Gaussian-with-slope succeeds at fitting but is a bad description for frequency bin 995.}
+\label{fit_display}
+\end{figure} 
 
+\newpage
+
+\noindent The presence of this effect doesn't yet explain why the map-derived FWHM would be different from the holographic and autocorrelation data. It seemed logical this could be because the beam-formed maps are essentially an average all feeds and polarisations. The averaging over feeds would dilute out the non-Gaussian shape because of centroid wander, and over polarisations because of averaging with clean Gaussians. To investigate, we mimicked the steps used to create the ring maps to form a single `holographic' CHIME beam. The results which show a much better agreement between the two methods are shown in Fig. \ref{formed_beams}.
+\\
+\\
+\noindent To form the CHIME beam from holography we:
+\begin{enumerate}
+\item Set all bad channels to zero.
+\item Normalize the max value of the beam to one.
+\item Take the average:
+\begin{equation}
+\langle A_i A_j^* \rangle = \sum_i A_i^2 + \sum_{i \neq j} A_iA_j^*
+\end{equation}
+\end{enumerate}
+
+\begin{figure}[h!]
+\includegraphics[width=\textwidth]{figures/hol_other/formed_beams.png}
+
+
+\caption{Seth provided fits to a CygA transit from his ring maps, with NS and EW polarisation split. This plot compares the resulting FWHM from the slices of the beam formed ring maps to the FWHM from beam formed holography. The EW polarisation ring map fits also show a large amplitude and the flattening of the low end of the oscillation.}
+\label{formed_beams}
+\end{figure}
+ 
+\newpage
+
+\section{Comparison to other sources}\label{othersources}
+
+We also have holographic data from CasA and VirA. We found that both CasA and CygA have non-Gaussian beams at similar frequencies, which is interesting considering they are opposite from zenith. However, VirA which is far off zenith maintains Gaussian beams throughout its width oscillation.
+
+%The angular resolution of the $\sim 150$ m holography baseline is roughly $17' $ at 800 MHz to $8'$ at 400 MHz. CygA's lobes are seperated by about an arcminute, CasA is at most 4 arcminutes, and VirA's half arcminute nucleus is surrounded by a halo of about $14' \times 10'$. In any case, its unlikely that the flattening effect is due to resolving the source since it occurs in the widest primary beams, only in the low frequency end of the wider polarisation's beam.
+
+\begin{figure}[h!]
+\includegraphics[width=\textwidth]{figures/hol_other/VirA_chid115_widths.png}
+\caption{VirA, which is 35 degrees off zenith, has nice Gaussians all the way through its width oscillation.}
+\label{vira}
+\end{figure} 
+
+
+\begin{figure}[h!]
+\includegraphics[width=\textwidth]{figures/hol_other/CasA_widths.png}
+\caption{This is a CygA transit from 2014, for another EW polarisation feed (ch\_id=111) close to the previous one (ch\_id=115, which isn't in the 2014 dataset). CasA which is symmetrically opposite CygA of zenith sees the same effect.}
+\label{casa}
+\end{figure} 
+
+\begin{figure}[h!]
+\includegraphics[width=\textwidth]{figures/hol_other/CygA-CasA_chid111_compare.png}
+\caption{Direct comparison between CygA and CasA. Their centroids are generally on opposite sides of the 0 hour angle (although not symmetrically), which fits the explanation that the dominant centroid shift is from the 1.9 degree cylinder rotation. The x-axis here is telescope angle, which means hour angle times $\cos(\rm{dec})$.}
+\label{cygacasa}
+\end{figure} 
+
+\begin{figure}[h!]
+\includegraphics[width=\textwidth]{figures/hol_other/widths_fullarray.png}
+\caption{EW polarisation widths for the full array. The high FWHM (generally higher than 3.5) seems to be fairly constant across feeds and cylinders, and in particular is not worse for feeds near the center or other features.}
+\label{fullarray}
+\end{figure} 
+
+\section{Conclusions}
+From our analysis of the EW polarisation width oscillation we've found that the discrepancy between the FWHM from maps and from holography is largely due to data flagging, normalization, and averaging. There is real, consistent, repeatable, frequency-dependent non-Gaussian structure, near boresight, present in all feeds, and specific to the EW polarisation. Its occurrence at the peaks of the FWHM oscillation indicate it's related to the standing wave effect causing the width oscillation. The EW polarisation illuminating more of the cylinder in the NS direction than the NS polarisation could see ``more bounces''. It's unclear if this shows up in models.
+
+This effect is not due to the galaxy because it's frequency dependent and polarized linearly. Nor does it come from resolving the source: the worst non-Gaussian structure occurs at low frequencies, where the primary beam is widest and the resolution for our 150m baseline is about 17' as compared to 8' at 800 MHz. The sources in question are either CasA (4'), CygA (lobes separated by 1') or VirA (compact center is small, the halo is fairly large: 14'x10'). Of course whether the discrepancy between auto-correlations and holography is in part due to source effects is still unclear.
+
+Finally, the effect doesn't seem to be correlated with telescope structure itself, in the sense that it's not worse or better around legs, towards either edge of the cylinder, specific to any one cylinder, etc...
+
+
+\begin{figure}[h!]
+\includegraphics[width=0.8\textwidth]{figures/hol_other/pixelized_sources.png}
+\caption{blaaaaaaa wtf}
+\label{pixelized_sources}
+\end{figure} 
+
+\begin{figure}[h!]
+\includegraphics[width=0.8\textwidth]{figures/hol_other/resolved_flux.png}
+\caption{blaaaaaaaa wtf}
+\label{resolved_flux}
+\end{figure} 
+
+
+\section{Algorithm recap}
+
+\begin{itemize}
+\item A point source calibration for the CHIME gains only.
+\item For 26m gains: A low-order polynomial fit to the amplitude, and a linear fit to the phase of the median (across feeds) peak response as a function of frequency. Average the fits to remove the day-to-day variation.
+\item Divide by calibrator (in this case TauA) to remove band pass.
+\item Scale amplitudes so that $\frac{1}{N_{bl}}\sum_{i\neq j} A_i A_j$ matches Pathfinder photometry.
+\item Smoothing of low S/N sources.
+\end{itemize}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=.8\textwidth]{figures/hol_other/averaged_slices.png}
+\caption{The single declination slices output from the above algorithm (before smoothing), for a single feed and frequency.}
+\label{example}
+\end{center}
+\end{figure}
+
+\newpage
+\section{Beam maps}
+
+These slices are then interpolated onto \texttt{healpix} maps using a Delaunay triangulation. The beam is symmetrized about zenith only for sources which would not intersect with actual measurements. HydraA is also linearly extrapolated to give amplitude 0 at the horizon. The interpolation is forced to zero at the largest telescope azimuth where we have holography data, uniformly for all polar angles. This is done only for feeds and frequencies which can be fit for all of the sources. 
+
+The averaged beam amplitude and phase, normalized to TauA at 643 MHz is shown in Figure \ref{example} below. Substantial side lobes are picked up even in the averaged beam. Some artefacts from the linear interpolation out to the horizon are visible, but with low amplitude. We also show the standard deviation across feeds of the amplitude. We see that it is dominated by the variance in the peak response across feeds, except at the location of the TauA where the amplitude is fixed. The variance in the side lobes is dominated by locations where there is data.
+
+\begin{figure}[h!]
+%\vspace{-.1in}
+\begin{center}
+\includegraphics[width=1.0\textwidth]{figures/hol_other/beam_freqsel8_summary_v2.png}
+\caption{The average beam amplitude, phase, and standard deviation across feeds for the West cylinder NS polarization at 643.4 MHz.\label{example}}
+\end{center}
+\end{figure}
+
+Below, in Figures \ref{nsprof0} and \ref{nsprof1}, we show a comparison of the NS profile of the interpolated holography beams and the simulated two-bounce beam.
+
+\begin{figure}[h!]
+%\vspace{-.1in}
+\begin{center}
+\includegraphics[width=1.0\textwidth]{figures/hol_other/ns_beam_profile_0-4_v2.png}
+\caption{The NS profile of the interpolated holography beams (colored lines), compared the two bounce simulated beam (in grey), for four selected frequencies in the first half of the band. We also show the Pathfinder photometry data (points) which are the nodes of the interpolation. \label{nsprof0}}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+%\vspace{-.1in}
+\begin{center}
+\includegraphics[width=1.0\textwidth]{figures/hol_other/ns_beam_profile_4-8_v2.png}
+\caption{The NS profile of the interpolated holography beams (colored lines), compared the two bounce simulated beam (in grey), for four selected frequencies in the second half of the band. We also show the Pathfinder photometry data (points) which are the nodes of the interpolation. \label{nsprof1}}
+\end{center}
+\end{figure}
+
+\newpage
+
+Clearly from Figures \ref{nsprof0} and \ref{nsprof1} we see that normalizing the beam at any source declination (in this case TauA, red dot) is a sensitive choice. In general, the interpolation of the Pathfinder photometry appears to be a good fit for an envelope of the simulated beam. However, one can find instances where it appears that the sparse sampling in declination is smoothing the beam shape. This interpreation is in contrast to Figure \ref{example}, where we see that a shifting and scallng of the oscillatory features leads to variance in the peak amplitude, and washes them out in the average beam.
+
+\section{Beam solid angle}
+
+In Figures \ref{bsans} and \ref{bsaew} we show a comparison between the solid angle of the interpolated holography beam and the simulated two-bounce beam, for the NS and EW polarization, respectively. The solid angle $\Omega$ is defined as
+\begin{equation}
+\Omega = \int d^2 \hat{n} P_{\rm n}(\hat{n}), \label{Omega}
+\end{equation}
+where $P_{\rm n}(\hat{n})$ is the normalized power pattern given by
+\begin{equation}
+P_{\rm n}(\hat{n}) = \frac{P(\theta, \phi)}{\max_{(\theta, \phi)} {P(\theta, \phi)}},
+\end{equation}
+for $P(\theta, \phi) = |A(\theta, \phi)|^2$ the power pattern, and $A$ the primary beam.
+
+\begin{figure}[h!]
+%\vspace{-.1in}
+\begin{center}
+\includegraphics[width=1.0\textwidth]{figures/hol_other/beam_solid_angle_nspol_v2.png}
+\caption{The beam solid angle of the NS polarization. \label{bsans}}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+%\vspace{-.1in}
+\begin{center}
+\includegraphics[width=1.0\textwidth]{figures/hol_other/beam_solid_angle_ewpol_v2.png}
+\caption{The beam solid angle of the EW polarization. \label{bsaew}}
+\end{center}
+\end{figure}
+
+We compute $\Omega$ for the holography beam for three cases: For the main beam (where the main beam is defined as $1.77\lambda/d$),  for regions within $\phi = 30^\circ$ (to mitigate the effect of the interpolation ringing at large angles), and for the full $4\pi$. The difference between the simulated and holography $\Omega$s is a factor $\sim 4$ at the low end of the band to $\sim 10$ at its largest around $500$ MHz.  The side lobes account for about $\sim 30-40\%$ of the measured $\Omega$.
+
+In Figures \ref{basans} and \ref{basaew}, we perform the same analysis as above but instead compute the solid angle of the beam amplitude, i.e. using $|A_{\rm n}| =  \sqrt{P_{\rm n}}$ in Eq. \ref{Omega} instead of $P_{\rm}$.
+
+\begin{figure}[h!]
+%\vspace{-.1in}
+\begin{center}
+\includegraphics[width=1.0\textwidth]{figures/hol_other/beam_amplitude_solid_angle_nspol_v2.png}
+\caption{The beam amplitude solid angle of the NS polarization. \label{basans}}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+%\vspace{-.1in}
+\begin{center}
+\includegraphics[width=1.0\textwidth]{figures/hol_other/beam_amplitude_solid_angle_ewpol_v2.png}
+\caption{The beam amplitude solid angle of the EW polarization. \label{basaew}}
+\end{center}
+\end{figure}

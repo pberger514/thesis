@@ -6,7 +6,7 @@
 \title{Title Goes Here}
 
 % Avoiding huge ToC
-%\setcounter{tocdepth}{3}
+\setcounter{tocdepth}{3}
 %\setcounter{secnumdepth}{3}
 
 % More spacious tables
@@ -19,14 +19,14 @@
 
 % Swap commenting to turn on links in late versions
 \newcommand{\url}[1]{#1}
-%\usepackage[]{hyperref}
-%\usepackage{xcolor}
-%\hypersetup{
- %   colorlinks,
- %   linkcolor={black!50!black},
- %   citecolor={blue!50!black},
- %   urlcolor={blue!80!black}
-%}
+\usepackage[]{hyperref}
+\usepackage{xcolor}
+\hypersetup{
+    colorlinks,
+    linkcolor={black!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
 
 % Fixes hyphens in math mode
 \mathchardef\myphen="2D
@@ -58,6 +58,11 @@
 
 %m-mode commands
 \newcommand{\nh}{\hat{\mathbf{n}}}
+
+\usepackage{calligra}
+\DeclareMathAlphabet{\mathcalligra}{T1}{calligra}{m}{n}
+\DeclareFontShape{T1}{calligra}{m}{n}{<->s*[2.2]callig15}{}
+\newcommand{\scripty}[1]{\ensuremath{\mathcalligra{#1}}}
 
 % Separate image directory
 \graphicspath{{./images/}}

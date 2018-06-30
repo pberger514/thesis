@@ -1,11 +1,113 @@
 \appendix
 
-
 \chapter{Appendices to Chapter \ref{chap:signal}}
 
 Peak Patch stuff.
 
 \chapter{Appendices to Chapter \ref{chap:hol}}
+
+\section{Holography-photometry correspondence}
+\label{app:hol:sec:photometry}
+
+The calibration requires holographic visibilities of both the source in question and the calibrator, given by\begin{subequations}
+\begin{align}
+V^{\rm src}_{i,{\rm 26}} &= g^{\rm src}_i g^{*{\rm src}}_{\rm 26} A_i(\delta_{\rm src}) A^*_{\rm 26} T_{\rm src} ~~ \left[ {\rm corr~units} \right] \label{holvis1}
+\\ 
+V^{\rm cal}_{i,{\rm 26}} &= g^{\rm cal}_i g^{*{\rm src}}_{\rm 26} A_i(\delta_{\rm cal}) A^*_{\rm 26} T_{\rm cal} ~~  \left[ {\rm corr~units} \right], \label{holvis2}
+\end{align}
+\end{subequations}
+on boresight. Eqs. \ref{holvis1} and \ref{holvis2} assume that the 26 m's beam is constant with declination, while any of the CHIME antenna beams, indexed by $i=1,\dots,N_{\rm feed}$, may vary. At this stage the units are correlator units. We then divide out the point source gain for the calibrator CHIME transit nearest the holography observation 
+\begin{align}
+g^{\rm cal}_i A_i(\delta_{\rm cal}) T^{1/2}_{\rm cal} ~~  \left[ \frac{\rm corr~units}{\rm Jy} \right]^{1/2}.
+\end{align}
+Each individual antenna's gain carries only a factor of the calibrator flux to the $1/2$, and we correct only for the CHIME gain in this way.
+\begin{subequations}
+\begin{align}
+\overline{V}^{\rm src}_{i,{\rm 26}} &= g^{*{\rm src}}_{\rm 26}A^*_{\rm 26}~\frac{A_i(\delta_{\rm src})}{A_i(\delta_{\rm cal})}  \frac{T_{\rm src}}{T_{\rm cal}^{1/2}} ~~ \left[ {\rm corr~units \cdot Jy} \right]^{1/2} \label{cholvis1}
+\\ 
+\overline{V}^{\rm cal}_{i,{\rm 26}} &=  g^{*{\rm src}}_{\rm 26} A^*_{\rm 26}~\frac{\cancel{A_i(\delta_{\rm cal})}}{\cancel{A_i(\delta_{\rm cal})}} T_{\rm cal}^{1/2} ~~  \left[ {\rm corr~units \cdot Jy} \right]^{1/2},  \label{cholvis2}
+\end{align}
+\end{subequations}
+where in Eq. \ref{cholvis2} we see that the dependence of the CHIME beam at transit cancels. The calibrated visibilities $\overline{V}$ now have awkward units, and the spectrum is multiplied by the 26m band pass. However, taking the ratio of Eqs. \ref{cholvis1} and \ref{cholvis2}
+\begin{align}
+\frac{\overline{V}^{\rm src}_{i,{\rm 26}}}{\overline{V}^{\rm cal}_{i,{\rm 26}}} = \frac{A_i(\delta_{\rm src})}{A_i(\delta_{\rm cal})} \frac{T_{\rm src}}{T_{\rm cal}},
+\end{align}
+a dimensionless quantity. This just means that we have normalized the beams to have amplitude 1 and phase 0 at the peak location of the calibrator. Next, we divide out ratio of the expected source and calibrator fluxes
+\begin{align}
+\frac{\overline{V}^{\rm src}_{i,{\rm 26}}}{\overline{V}^{\rm cal}_{i,{\rm 26}}} \frac{T_{\rm cal}}{T_{\rm src}} = \frac{A_i(\delta_{\rm src})}{A_i(\delta_{\rm cal})}\equiv \hat{A}_i(\delta_{\rm src} | \delta_{\rm cal}).
+\end{align}
+This step is quite important, since from it we obtain $\hat{A}_i(\delta_{\rm src} | \delta_{\rm cal})$, our estimate of the beam at the location of the source given the calibrator. In principle we can stop here, since we can now convert these beams to beam transfer matrices. However we would like to validate the beams by comparing to photometry from the Pathfinder, that has many fewer systematics than the holography. 
+
+To create ring maps we first bin the baselines by their North-South separation. Considering only the NS direction the calibrated visibilities are then,
+\begin{align}
+V_{(i-j)} = \int {\rm d} \delta \left\langle \frac{A_i(\delta)}{A_i(\delta_{\rm cal})} \frac{A_j(\delta)}{A_j(\delta_{\rm cal})}^* \right\rangle_{(i-j)} T(\delta) ~ {\rm e}^{i2\pi \frac{(i-j) \Delta x}{\lambda}(\sin{\delta} - \sin{\delta_{\rm cal}})}, 
+\end{align}
+where $\Delta x = 0.3~{\rm m}$ for CHIME. The visibilities are phased up to the point source, meaning the geometric phase factor is fixed to be zero there. If there's a point source in the beam the sky temperature is just $T(\delta) = \delta_{\rm D}(\delta - \delta_{\rm src}) T_{\rm src}$, and we can compute the integral
+\begin{align}
+V_{(i-j)} = \left\langle \frac{A_i(\delta_{\rm src})}{A_i(\delta_{\rm cal})} \frac{A_j(\delta_{\rm src})}{A_j(\delta_{\rm cal})}^* \right\rangle_{(i-j)} T_{\rm src} ~ {\rm e}^{ix(\theta_{\rm src} - \theta_{\rm cal})},
+\end{align}
+where we have defined $x \equiv i2\pi \frac{(i-j) \Delta x}{\lambda}$ and $\theta \equiv \sin{\delta}$. To do aperture photometry we then compute the inverse Fourier transform of this quantity,
+\begin{align}
+\widetilde{V_{(i-j)}}(\theta') \propto \int {\rm d} x \left\langle \frac{A_i(\delta_{\rm src})}{A_i(\delta_{\rm cal})} \frac{A_j(\delta_{\rm src})}{A_j(\delta_{\rm cal})}^* \right\rangle_{(i-j)} T_{\rm src} ~ {\rm e}^{ix(\theta_{\rm src} - \theta_{\rm cal})} {\rm e}^{-ix\theta'},
+\end{align}
+and for simplicity we then evaluate it at the location of the source
+\begin{align}
+\widetilde{V_{(i-j)}}(\theta_{\rm src}) \propto \sum_{(i-j)} \left\langle \frac{A_i(\delta_{\rm src})}{A_i(\delta_{\rm cal})} \frac{A_j(\delta_{\rm src})}{A_j(\delta_{\rm cal})}^* \right\rangle_{(i-j)} T_{\rm src}. \label{photometry}
+\end{align}
+We see that if $\theta_{\rm cal} = 0$, the phase factors simply cancel and we obtain the average of all the visibilites (after discretizing the Fourier the transform).
+
+If only intercylinder baselines have been used to create the ring map, after diving by the expected flux of the source this can then be compared to the average cross-cylinder beam obtained from holography
+\begin{equation}
+\frac{1}{N_{\rm intercyl}}\sum_{{\rm cyl}_i \ne{\rm cyl}_j}  A_i(\delta_{\rm src} | \delta_{\rm cal})A_j(\delta_{\rm src} | \delta_{\rm cal})^*
+\end{equation}
+
+\section{A multi-bounce model for the CHIME beam}
+\label{app:hol:sec:model}
+
+\subsection{2D one bounce model}
+\label{app:hol:sec:model:ss:1b}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=.4]{figures/hol_other/cylpic.pdf}
+\caption{The relevant geometry and definitions for the problem of a two dimensional plane wave encountering a parabolic aperture.}
+\end{center}
+\label{cylpic}
+\end{figure}
+
+Consider a plane electromagnetic wave traveling through free space striking a cylindrical reflector. If the source of the plane wave is directly over head, that is if the angle between the source and the axis of symmetry of the parabola $\theta_i$ is zero, then each wave front reaches the feed in phase after reflecting off the cylinder. Here $i=1,\dots,N$, where $N$ is number angles at which the response to the point source has been sampled. However, invoking the Huygens' Principle, for an angle $\theta_i\neq 0 $, the section of the wave front striking the cylinder at any location $(x_j, y_j)$ will contribute to the signal at the feed. Furthermore it travels a distance $\scripty{r}_{ij}$ which maybe be different from the other sections, since $\vec{\scripty{r}_{ij}} = \vec{R}(\theta_i) + \vec{r}(x_j)$ for $\vec{R}(\theta_i)$ the vector to the source and $\vec{r}(x_j)$ the vector from the focus to the location on the cylinder. The goal, therefore, is to solve for the complex contribution $g_j$ to the response at the feed, from each section of cylinder. The geometry of the parabola constrains
+\begin{equation}
+y_j = \frac{x_j^2}{4F},
+\end{equation}
+where $F$ is the focal length. We discretize the cylinder in the same manner as the angles $\theta_i$. We centre our coordinate system at the feed so that $-x_0 = x_N,~-x_1=x_{N-1},\dots$ Refer to Figure \ref{cylpic} for the relevant geometry and definitions.
+
+Traveling through free space, a plane wave acquires a phase $e^{ik\mathcal{R}}$, where $k = 2\pi/\lambda$, $\lambda$ is the wavelength, and $\mathcal{R}$ is the total distance of travel. The distance our discrete wave fronts travel from the source is just $\mathcal{R}_{ij} = \scripty{r}_{ij}  + r_j$, before arriving at the feed. Therefore the response at the feed is just the sum of the contributions from each section of cylinder
+\begin{equation}
+E(\theta_i) = E_0 \sum_j e^{ik(\scripty{r}_{ij}  + r_j)} g_j.
+\label{sumovercyl}
+\end{equation}
+We decompose our vectors in Cartesian coordinates as
+\begin{align}
+\vec{R}_i &= \left(R \sin(\theta_i), R \cos(\theta_i)\right) \\
+\vec{r}_j &= \left(x_j, -(F-\frac{x_j^2}{4F})\right) 
+\end{align}
+Therefore
+\begin{align}
+\vec{\scripty{r}_{ij}} &= \left(R\sin(\theta_i) + x_j, R \cos(\theta_i) + y_j)\right) \\
+\rightarrow |\vec{\scripty{r}_{ij}}| &= R \left( (\sin(\theta_i) + x_j/R)^2 + (\cos(\theta_i) + y_j/R )^2 \right)^{1/2}
+\end{align}
+We then take the far field limit, expanding in Taylor series and keeping only up to terms linear in $x/R$ and $y/R$ to obtain
+\begin{equation}
+|\vec{\scripty{r}_{ij}}| = R + x_j\sin(\theta_i) + y_j\cos(\theta_i) 
+\label{taylor}
+\end{equation}
+However, in interferometry we can only hope to measure relative phases. In the case of holography the tracking dish serves as the reference beam and all phases are measured relative to its. We therefore ask for the differential phase acquired relative to the zero of our coordinate system, by subtracting the distance to the source from (\ref{taylor}). Finally, (\ref{sumovercyl}) becomes
+\begin{equation}
+E(\theta_i) = E_0 \sum_j e^{ik( x_j\sin(\theta_i) - (F_i - \frac{x_j^2}{4F})\cos(\theta_i)   + r_j)} g_j.
+\label{final1d}
+\end{equation}
+To project on to the cylinder we simply invert (\ref{final1d}) to solve for $g_j$. For a perfect cylinder, and if the feed itself has no intrinsic phase which depends on the angle to $(x_j, y_j)$, then the $g_j$ are real and correspond to the aperture illumination at that point. In this model, it's then easy to see that some distortion in the cylinder produces a differential phase which is not removed by inverting (\ref{final1d}). The phase of the resulting complex $g_j$ corresponds to the amplitude of the distortion in units of wavelength.
+
 
 \section{Noise in interferometers}
 \label{app:hol:sec:noise}
