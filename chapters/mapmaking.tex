@@ -1,5 +1,15 @@
 \chapter{\label{chap:mapmaking} Mapmaking}
 
+The initial part of this chapter is heavily based on 
+\newline
+\newline
+Berger, P., Oppermann, N., Pen, U.-L., \& Shaw, J. R. 2017, Mon. Not. Roy. Astron. Soc., 472, 4928,
+\newline
+\newline
+which describes development of the Bayesian $m$-mode mapmaking technique and its validation with simulations. However, it also includes additional sections with the application of the method to CHIME Pathfinder data and validation of the beam model from Chapter \ref{chap:hol}.
+
+\newpage
+
 %%%%%%%%%%%%%%%%% BODY OF PAPER %%%%%%%%%%%%%%%%%%
 
 \section{Introduction} \label{ch:mm:sec:intro}
@@ -202,6 +212,12 @@ Clearly the assumption of independent frequencies is inadequate. We would like t
 (for a proof see Appendix \ref{app:mm:sec:proof}), but we immediately encounter the standard issue that the signal and noise covariance matrices are diagonal in different bases.\footnote{Eq. \eqref{PRODUCT} solves the case of $\mathbf{G}=\mathbf{I}$, where $\mathbf{I}$ is the identity, but the case for general $\mathbf{G}$ can easily be solved by simply factoring it, assuming it is invertible, which simply modifies the definition of $\mathbf{H}$.} Even in the confusion limit, we can only expect this factorizability for on-sky quantities, which must then be tranformed into the data basis by multplication with beam transfer matrices. Considering the combined frequency and spatial coordinate matrices in block matrix form, this multiplication applies a smoothly varying function across the diagonal of the tensor product structure, forcing us to consider the full shape of the covariance matrix.
 
 A simple solution is to enforce a smooth spectrum of the removed point source by performing a low-order polynomial fit to the point source estimated with a diagonal-in-frequency covariance matrix before removal. This method has been shown to be effective for the purpose of 21-cm intensity mapping by \cite{barry2016}. Alternatlively, due to the highly structured form of the covariance matrix, a conjugate gradient scheme for performing the full inversion -- with the results of this work as the initial guess -- could be feasible, although we leave this for later work.
+
+\section{Application to CHIME Pathfinder data}
+\label{ch:mm:sec:data}
+
+
+
 
 \section{Conclusion}
 \label{ch:mm:sec:conclusions}

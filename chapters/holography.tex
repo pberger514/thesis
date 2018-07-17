@@ -137,6 +137,13 @@ V^{\rm meas}_{ij}(\nu, \phi(t)) = g_i(\nu, t)g_j^*(\nu, t)V_{ij}(\nu, \phi) \rig
 \end{equation}
 The visibilities are multiplied by the complex, time-, and frequency-dependent gains at each feed. If we would like to average the visibilities across observations taken at different times, we should first correct them by estimating and diving out the gains. More mathematical details of this process can be found in Appendix \ref{app:hol:sec:photometry}, however we provide an overview of the algorithm here.
 
+\begin{figure}[h!] % not h only
+	\centering
+	\includegraphics[width=0.6\textwidth]{figures/spie/treated_phase_ex_viro.png}%
+	\caption{The phase of the gridded and averaged beams at 681 MHz for a selected antenna and polarisation for Virgo A. Shaded regions represent regions of one standard deviation of the averaged observations $\sigma_{\arg{A}}$.}
+	\label{phaseav}
+\end{figure} 
+
 The CHIME-only gains can be estimated through a standard eigendecomposition of the peak response of the visibilities at the transit of a calibrator point source, soon before or after the holographic observation, taking care of the $g_{CH}$ term in Eq. \ref{visgains}. After this stage, as the 26 m is common-mode, the relative gains between feeds at transit are fixed and are seen match well between holographic and CHIME-only visibilites. Choosing a calibrator normalizes the beams to have amplitude 1 and phase 0 at the celestial coordinates of the source, which is equivalent to choosing the origin of the beam coordinate system. Since the CHIME Pathfinder is generally in continuous observation these calibrator transits are readily available. For our observations we choose Taurus A due to its favorable positioning far from the sun during our observation periods. However, the 26 m can not be expected to be in drift-scan mode during all calibrator transits, meaning the array is an a heterogeneous configuration at these times, and the 26 m gain cannot be calibrated out in this way. As holography selects out single-feed components of the visibilities, a holographic observation of the calibrator at its time of transit could serve equally as a reference for the 26 m gains. Although this strategy was adopted for later observations, it was not the case for all data considered here, and so another algorithm was developped free from this requirement. The algorithm performs a linear fit to the phase and a low-order polynomial fit to the amplitude of the frequency-dependence of the holographic peak response after CHIME-only calibration. These fits are then averaged across all transits of the source, and the individual transits are scaled by the ratio of their fit to the average. This scheme is based on a physical understanding of the gains, and is designed to introduce no spurrious spectral structure into the beams. Indeed, the algorithm is limited by the gain drift between calibrator and source transit, but as the times between them are generally only a couple of hourse this a few percent effect. As well, no correction for the effect of the time-dependence of the gains away from transit is applied.
 
 We can then proceed to average across transits, however we first must regrid the visibilities in hour angle onto a common uniform grid, using an inverse Lanczos resampling (see Appendix \ref{app:hol:sec:regrid}). At this point the only input to the noise covariance other than the assumption of constant instrumental noise across frequencies and baselines is RFI flagging, which assigns infinite noise to flagged time samples. We note that the telescope is not sensitive to spatial Fourier modes larger than its width ${\rm w_{EW}}$ in wavelengths
@@ -147,18 +154,11 @@ where $m$ indexes the Fourier mode conjugate to the azimuthal angle $\phi$. Ther
 
 We then perform an inverse-variance-weighted average, seperately for the amplitude and phase. We include only sections of beam for which we have collected at least 2 transits. The differing coverage means the final estimate can have different noise properties for different sections. An estimate of the final errors $\sigma_{|A|}$ and $\sigma_{\arg{A}}$ is provided simply by the standard deviation of the non-zero contributions to the averaging.
 
-\begin{figure}[h!] % not h only
-	\centering
-	\includegraphics[width=0.6\textwidth]{figures/spie/treated_phase_ex_viro.png}%
-	\caption{The phase of the gridded and averaged beams at 681 MHz for a selected antenna and polarisation for Virgo A. Shaded regions represent regions of one standard deviation of the averaged observations $\sigma_{\arg{A}}$.}
-	\label{phaseav}
-\end{figure} 
-
 Figure \ref{griddeddata} displays the amplitudes of the multi-declination results at 681 MHz for both polarisations of a single antenna near the centre of the West cylinder, and its corresponding antenna on the East cylinder. Regions of one standard deviation are shaded. The units of the amplitudes here are arbitrary as no absolute calibration has been attempted. These values are meaningful relative to each other as the product of the amplitude of the primary beam at the declination of the source and the flux of the source (Eq. (\ref{holvis2})). Figure \ref{phaseav} shows the phase recovered from the averaging procedure for Virgo A at a single frequency, feed, and polarisation. We observe sidelobe structure which is similar in the NS direction between sources spanning the range of S/N, and much of the far sidelobe structure is common between high S/N sources. The changing offset from zero hour angle of the peak of the main beam with declination is a known effect, due to the 1.9 degree rotation of the Pathfinder cylinder axis from astronomical North, discussed in Section \ref{ch:hol:sec:io}.
 
 \subsection{Absolute calibration and 2D beam estimation}
 
-\begin{figure}[t] % not h only
+\begin{figure}[h!] % not h only
 	\centering
 	\includegraphics[width=0.92\textwidth]{figures/spie/full2dbeam_thick2.png}%
 	\caption{The top four panels: A cartesian projection of the 2D beam estimate for all cylinders and polarisations, in latitude and longitude of telescope coordinates, for a sample feed at 681 MHz. The traces have been artificially thickened, which may misrepresent localized features. These are slices through a full pattern like the model shown in the lower right hand panel. Bottom left: The standard deviations, which vary by several orders of magnitude based on the signal-to-noise of the corresponding source. Bottom right: The full 2D beam amplitude from a simulation of an ideal cylinder at 681 MHz. In all cases the maps have been normalized to the peak value.}
@@ -169,14 +169,6 @@ To produce the final estimate of the amplitude of the 2D beam at each feed we mu
 
 With the data calibrated, we have now produced an estimate of the two-dimensional beam shape, with a spare sampling in the NS direction (one sample from each source), and dense in the EW direction. In Figure \ref{2dbeamslices}, we show the data for 7 of the sources rotated into telescope coordinates, $(\theta_t, \phi_t)$. This is the spherical polar coordinate system whose origin is zenith and with polar axis aligned with the orientation of the cylinders. In telescope coordinates the beam has maximal symmetry, and so is the natural system for analysis and interpolation (described below). In Figure \ref{2dbeamslices}, we also show the estimated S/N of the slices and a comparison to a numerical electromagnetic simulation of an ideal cylinder.
 
-There are a few orders of magnitude between the S/N of our brightest four sources and the dimmest four. For the brightest sources, thermal noise reaches our target sensitivity \citep{mmodes2} in only a single scan. Clearly we are still noise dominated at large angles in the latter four. We observe correlated sidelobe structure between the brightest sources in the NS direction. Also, there is a large asymmetric sidelobe at small positive $\phi_t$ which correlates between all sources. The NS correlation is only approximate, but this is to be expected since the incoming plane wave strikes the cylinder at different angles, and so probes different sections, depending on the source. The traces in Figure \ref{full2dbeam} are artificially thickened and so may also misrepresent localized features.
-
-Even the low S/N sources allow us to infer the shape of the main beam with declination. We observe a plateau which extends to about $20^{\circ}$ from zenith, followed by a sharp drop off. This is in accordance with the prediction from our ideal cylinder simulations, discussed in the last subsection. It is clear, from comparison with simulation, that there is much more structure in the NS direction than we have sampled with only 8 sources. However, we see as well that the side lobes observed with holography are an order of magnitude larger that then the ideal simulation. We have confirmed with simulations of a distorted cylinder 
-
-We would now like to interpolate the sparse sampling in declination to produce an estimate of the full two-dimensional beam, for each feed and frequency. The slices are linearly interpolated onto \texttt{healpix} maps using a Delaunay triangulation. The beam is symmetrized about zenith only for sources which would not intersect with actual measurements. HydraA is also linearly extrapolated in the $\phi_t$ to give amplitude 0 at the horizon. The interpolation is forced to zero at the largest telescope azimuth where we have holography data, uniformly for all polar angles. This is done only for feeds and frequencies which can be fit for all of the sources.
-
-The advantage of this technique is that it is \textit{convergent}, in the sense that as more measurements of the NS profile are added it will produce the true beam shape. Furthermore, we have paid special attention to ensure that our gridding and interpolation always sample any possible beam structure conservatively, so that the we obtain the exact measured beam shape at the locations of the sources.
-
 \begin{figure}[h!]
 %\vspace{-.1in}
 \begin{center}
@@ -185,13 +177,15 @@ The advantage of this technique is that it is \textit{convergent}, in the sense 
 \end{center}
 \end{figure}
 
+There are a few orders of magnitude between the S/N of our brightest four sources and the dimmest four. For the brightest sources, thermal noise reaches our target sensitivity \citep{mmodes2} in only a single scan. Clearly we are still noise dominated at large angles in the latter four. We observe correlated sidelobe structure between the brightest sources in the NS direction. Also, there is a large asymmetric sidelobe at small positive $\phi_t$ which correlates between all sources. The NS correlation is only approximate, but this is to be expected since the incoming plane wave strikes the cylinder at different angles, and so probes different sections, depending on the source. The traces in Figure \ref{2dbeamslices} are artificially thickened and so may also misrepresent localized features.
+
+Even the low S/N sources allow us to infer the shape of the main beam with declination. We observe a plateau which extends to about $20^{\circ}$ from zenith, followed by a sharp drop off. This is in accordance with the prediction from our ideal cylinder simulations, discussed in the last subsection. It is clear, from comparison with simulation, that there is much more structure in the NS direction than we have sampled with only 8 sources. However, we see as well that the side lobes observed with holography are an order of magnitude larger that then the ideal simulation. We have confirmed with simulations of a distorted cylinder 
+
+We would now like to interpolate the sparse sampling in declination to produce an estimate of the full two-dimensional beam, for each feed and frequency. The slices are linearly interpolated onto \texttt{healpix} maps using a Delaunay triangulation. The beam is symmetrized about zenith only for sources which would not intersect with actual measurements. HydraA is also linearly extrapolated in the $\phi_t$ to give amplitude 0 at the horizon. The interpolation is forced to zero at the largest telescope azimuth where we have holography data, uniformly for all polar angles. This is done only for feeds and frequencies which can be fit for all of the sources.
+
+The advantage of this technique is that it is \textit{convergent}, in the sense that as more measurements of the NS profile are added it will produce the true beam shape. Furthermore, we have paid special attention to ensure that our gridding and interpolation always sample any possible beam structure conservatively, so that the we obtain the exact measured beam shape at the locations of the sources.
+
 After producing intensity beams at each feed and frequency we then have the option to average across feeds, or stack along redundant baselines. The advantage of averaging is a heavy reduction of computational complexity in generating the beams, the beam transfer matrices, and in mapmaking with the holographic beam. The averaged (by cylinder and polarization) beam is useful for debugging and iterating the pipeline, and gives simple results useful for referencing to attempts at the exact solution. The beam averaged along redundant baselines is indeed the exactly solution when the visibilities are first stacked accordingly as well.
-
-Finally, to produce the beam transfer matrices (see Chapter \ref{chap:mmodes}) by forming products and performing a Fourier transform from the intensity-only beam functions we've obtained, we require a model for polarization. See Appendix \ref{app:hol:sec:polmodel} for details.
-
-The averaged beam amplitude and phase, normalized to TauA at 643 MHz is shown in Figure \ref{example} below. Substantial side lobes are picked up even in the averaged beam. Some artefacts from the linear interpolation out to the horizon are visible, but with low amplitude. We also show the standard deviation across feeds of the amplitude. We see that it is dominated by the variance in the peak response across feeds, except at the location of the TauA where the amplitude is fixed. The variance in the side lobes is dominated by locations where there is data.
-
-Below, in Figures \ref{nsprof0} and \ref{nsprof1}, we show a comparison of the NS profile of the interpolated holography beams and the simulated ideal beam.
 
 \begin{figure}[h!]
 %\vspace{-.1in}
@@ -209,6 +203,12 @@ Below, in Figures \ref{nsprof0} and \ref{nsprof1}, we show a comparison of the N
 \end{center}
 \end{figure}
 
+Finally, to produce the beam transfer matrices (see Chapter \ref{chap:mapmaking}) by forming products and performing a Fourier transform from the intensity-only beam functions we've obtained, we require a model for polarization. See Appendix \ref{app:hol:sec:polmodel} for details.
+
+The averaged beam amplitude and phase, normalized to TauA at 643 MHz is shown in Figure \ref{example} below. Substantial side lobes are picked up even in the averaged beam. Some artefacts from the linear interpolation out to the horizon are visible, but with low amplitude. We also show the standard deviation across feeds of the amplitude. We see that it is dominated by the variance in the peak response across feeds, except at the location of the TauA where the amplitude is fixed. The variance in the side lobes is dominated by locations where there is data.
+
+In Figures \ref{nsprof0} and \ref{nsprof1}, we show a comparison of the NS profile of the interpolated holography beams and the simulated ideal beam.
+
 Clearly from Figures \ref{nsprof0} and \ref{nsprof1} we see that normalizing the beam at any source declination (in this case TauA, red dot) is a sensitive choice. In general, the interpolation of the Pathfinder photometry appears to be a good fit for an envelope of the simulated beam. However, one can find instances where it appears that the sparse sampling in declination is smoothing the beam shape. This interpreation is in contrast to Figure \ref{example}, where we see that a shifting and scalling of the oscillatory features leads to variance in the peak amplitude, and washes them out in the average beam.
 
 %\begin{figure}[h!]
@@ -219,9 +219,7 @@ Clearly from Figures \ref{nsprof0} and \ref{nsprof1} we see that normalizing the
 %\end{center}
 %\end{figure}
 
-\subsubsection{Beam solid angle}
-
-\begin{figure}[h]
+\begin{figure}[h!]
 %\vspace{-.1in}
 \begin{center}
 \includegraphics[width=1.0\textwidth]{figures/hol_other/beam_solid_angle_nspol_v2.png}
@@ -229,13 +227,15 @@ Clearly from Figures \ref{nsprof0} and \ref{nsprof1} we see that normalizing the
 \end{center}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[h!]
 %\vspace{-.1in}
 \begin{center}
 \includegraphics[width=1.0\textwidth]{figures/hol_other/beam_solid_angle_ewpol_v2.png}
 \caption{The beam solid angle of the EW polarization. \label{bsaew}}
 \end{center}
 \end{figure}
+
+\subsubsection{Beam solid angle}
 
 In Figures \ref{bsans} and \ref{bsaew} we show a comparison between the solid angle of the interpolated holography beam and the simulated two-bounce beam, for the NS and EW polarization, respectively, for 8 selected frequencies which span the band. The solid angle $\Omega$ is defined as
 \begin{equation}
@@ -251,9 +251,9 @@ We compute $\Omega$ for the holography beam for three cases: For the main beam (
 
 \section{Analysis and Modeling} \label{ch:hol:sec:analysis}
 
-In this section, we discuss some of the basic properties of the beam, in comparison to the fiducial theoretical model and to numerical simulations of an ideal Pathfinder cylinder. In general, the primary beam slices we recover meet our expectation from our 8 sources, in terms of main beam shape and S/N on sidelobe structure. As well, the measured amplitude of each source will broadly show the beam shape dropping off away from the zenith in the NS direction. We will describe future directions in improving this technique.
+In this section, we discuss some of the basic properties of the beam, in comparison to the fiducial theoretical model and to numerical simulations of an ideal Pathfinder cylinder. In general, the primary beam slices we recover meet our expectation from our 8 sources, in terms of main beam shape and S/N on sidelobe structure. As well, the measured amplitude of each source will broadly show the beam shape dropping off away from the zenith in the NS direction. We will also show evidence for a first-principles model of the beam and describe future directions in improving this technique.
 
-\subsection{Single slice properties}
+\subsection{Basic considerations}
 
 \begin{figure}[h!] % not h only
 	\centering
@@ -268,15 +268,15 @@ It is well-known \citep{wander1, wander2} that the presence of a standing wave b
 
 We observe clear sidelobe structure which is common between sources at nearby declinations, however the structure can vary with cylinder and polarisation. Since the two polarizations illuminate the cylinder differently, it is not unexpected that the two polarizations may have slightly different sidelobe structure. Similarly, the two cylinders are not identical, and so the sidelobes should be different between them. Again, we see similar broken EW symmetry effects in simulations of a cylinder with an imperfect surface which is itself asymmetric. Furthermore, surface distortion amplifies sidelobes uniformly, to a level which matches that which we observe in the data.
 
-\subsubsection{Non-Gaussian Structure}
-
-Analysis of the full-width at half maxima (FHWM) of raw holography data uncovered a non-Gaussian beam artifact. Specifically, the beam artifact is that at particular frequencies near the peaks of the FWHM oscillation, the beams become either flat or double-humped. This is seen only in the East-West polarization beams. Therefore due the frequency dependence and linear polarization of the effect we can be sure it is not due to contamination. Nor does it come from resolving the source: the worst non-Gaussian structure occurs at low frequencies, where the primary beam is widest and the resolution for our 150m baseline is about 17' as compared to 8' at 800 MHz. Furthermore, the effect  is concentrated on boresight. It is present for CygA (declination 40.7) and CasA (declination 58.8), but VirA (declination 12.4) which is far off zenith maintains Gaussian beams throughout its width oscillation. It is seen correspondingly in the in the Pathfinder auto-correlations as well. Finally, the effect doesn't seem to be correlated with telescope structure itself, in the sense that it's not worse or better around legs, towards either edge of the cylinder, or specific to any one cylinder. Its occurrence at the peaks of the FWHM oscillation indicate it's related to the standing wave effect causing the width oscillation. The EW polarisation illuminating more of the cylinder in the NS direction than the NS polarisation could see ``more bounces''. However, attempts to include many bounces have yet failed to reproduce this effect in simulations.
-
-\begin{figure}[h!]
+\begin{figure}[t]
 \includegraphics[width=\textwidth]{figures/hol_other/CygA-CasA_chid111_compare.png}
 \caption{This comparison between raw holographic CygA and CasA data, at few frequencies and a single feed, shows the frequency dependence of the non-Gaussian structure. The first panel shows the spectrum of width oscillation for the 1024 frequencies of the CHIME band. The vertical lines mark the locations of the transits that are shown as a function of hour angle in the bottom four panels. The central panels are taken from the middle of the band while bottom two are from the low end of the band. The bottom left two panels (light colours) are at the minima of the oscillation, and the right two (dark colours) are at the maxima. The non-Gaussian shape is clearly seen in the middle right panel. The CygA and CasA centroids are generally on opposite sides of the 0 hour angle, since they are on opposite sides of zenith, following the centroid shift from the 1.9 degree cylinder rotation.}
 \label{cygacasa}
 \end{figure} 
+
+\subsubsection{Non-Gaussian Structure}
+
+Analysis of the full-width at half maxima (FHWM) of raw holography data uncovered a non-Gaussian beam artifact. Specifically, the beam artifact is that at particular frequencies near the peaks of the FWHM oscillation, the beams become either flat or double-humped. This is seen only in the East-West polarization beams. Therefore due the frequency dependence and linear polarization of the effect we can be sure it is not due to contamination. Nor does it come from resolving the source: the worst non-Gaussian structure occurs at low frequencies, where the primary beam is widest and the resolution for our 150m baseline is about 17' as compared to 8' at 800 MHz. Furthermore, the effect  is concentrated on boresight. It is present for CygA (declination 40.7) and CasA (declination 58.8), but VirA (declination 12.4) which is far off zenith maintains Gaussian beams throughout its width oscillation. It is seen correspondingly in the in the Pathfinder auto-correlations as well. Finally, the effect doesn't seem to be correlated with telescope structure itself, in the sense that it's not worse or better around legs, towards either edge of the cylinder, or specific to any one cylinder. Its occurrence at the peaks of the FWHM oscillation indicate it's related to the standing wave effect causing the width oscillation. The EW polarisation illuminating more of the cylinder in the NS direction than the NS polarisation could see ``more bounces''. However, attempts to include many bounces have yet failed to reproduce this effect in simulations.
 
 Interestingly, this effect is not seen in Pathfinder ring maps. This can be attributed to the averaging-over-feeds effect that occurs when performing the Fourier transform, washing out the oscillatory structure. We confirmed this by mimicked the steps used to create the ring maps to form a single `holographic' CHIME beam. That is we computed the average:
 \begin{equation}
@@ -310,131 +310,59 @@ The results which show good agreement between the two methods are shown in Fig. 
 \label{allfeeds}
 \end{figure}
 
-Figure \ref{allfeeds} shows the averaged amplitude of the 2D beam, one line for each feed of the array, for a single frequency bin at 681 MHz. The data have now been scaled by the fluxes of the sources (and normalized to Cygnus A) so that the NS beam shape can be inferred, and transformed to telescope coordinates. Much of the of sidelobe structure, even at large angles, is highly correlated across full sets, by cylinder and polarisation. Of course there is some variation within each panel of Figure \ref{allfeeds}, owing to the feeds probing different areas along the cylinder. This spread is larger for the EW polarisation since, as discussed in the previous subsection and Section \ref{ch:hol:sec:io:ss:i}, the ellipticity of the illumination means the EW polarisation sees more of the cylinder.
+Figure \ref{allfeeds} shows the averaged amplitude of the beam, one line for each feed of the array, for a single frequency bin at 681 MHz. Much of the of sidelobe structure, even at large angles, is highly correlated across full sets, by cylinder and polarisation. Of course there is some variation within each panel of Figure \ref{allfeeds}, owing to the feeds probing different areas along the cylinder. This spread is larger for the EW polarisation since, as discussed in the previous subsection and Section \ref{ch:hol:sec:io:ss:i}, the ellipticity of the illumination means the EW polarisation sees more of the cylinder.
 
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=.8\textwidth]{figures/hol_other/dd_width_Ecyl_Npol.png}
-\caption{The beam widths for the 6 sources, for the East cylinder and NS polarisation, as a function of frequency bin and position along the cylinder. White regions are flagged out in various ways during the averaging procedure (RFI frequency mask, by-hand bad channel mask, and bad Gaussian fits). The panels are ordered by decreasing declination, which is shown (rounded to an integer) in the subtitle of each plot. However, the distribution is not symmetric about zenith, with PerB at $3^{\circ}$ off zenith. In widths the cylinder appears very redundant at high declinations displaying the scaling with frequency and oscillation we expect, across the cylinder. However frequency-position structure appears at low declinations (curving features in the bottom right of VirA and HerA plots), most prominently at the south end.}
-\end{center}
-\end{figure}
+An advantage of a phased array such as the CHIME pathfinder is the high redundancy of its baselines, due to the placing of the feeds on a regularly spaced grid. This choice, while not ideal for imaging, provides maximal sensitivity for a selected number of spatial Fourier modes. As well, it can greatly simplify the task of calibrating such a large number of antennas \citep{redundantbaselines}, as each redundant baseline should see the same sky. Unfortunately, variations in the primary beam from antenna to antenna break the redundancy to some degree and so complicate this analysis.
 
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=.8\textwidth]{figures/hol_other/dd_width_Wcyl_Npol.png}
-\caption{The beam widths for the 6 sources, for the West cylinder and NS polarisation, as a function of frequency bin and position along the cylinder. White regions are flagged out in various ways during the averaging procedure (RFI frequency mask, by-hand bad channel mask, and bad Gaussian fits). The panels are ordered by decreasing declination, which is shown (rounded to an integer) in the subtitle of each plot. However, the distribution is not symmetric about zenith, with PerB at $3^{\circ}$ off zenith. \newline The results here mirror the East cylinder.}
-\end{center}
-\end{figure}
-
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=.8\textwidth]{figures/hol_other/dd_width_Ecyl_Epol.png}
-\caption{The beam widths for the 6 sources, for the East cylinder and EW polarisation, as a function of frequency bin and position along the cylinder. White regions are flagged out in various ways during the averaging procedure (RFI frequency mask, by-hand bad channel mask, and bad Gaussian fits). The panels are ordered by decreasing declination, which is shown (rounded to an integer) in the subtitle of each plot. However, the distribution is not symmetric about zenith, with PerB at $3^{\circ}$ off zenith. \newline At high declinations the EW polarisation shows the same scaling with frequency and oscillation we expect, as well as the slightly wider beams we expect, across the cylinder. At low declinations the same structure appears at the south end of the cylinders, although the rippling is faster.}
-\end{center}
-\end{figure}
+One of the biggest advantages of our holographic set up is that a single scan correlates the 26 m reference beam with the entire CHIME Pathfinder array, and so provides high signal-to-noise ratio measurements of each feed individually, at each frequency. Knowledge of the difference between feeds can be used produce an accurate estimate of the true sky modes, restoring the redundancy of the array.
 
 \begin{figure}[h!]
 \begin{center}
 \includegraphics[width=.8\textwidth]{figures/hol_other/dd_width_Wcyl_Epol.png}
 \caption{The beam widths for the 6 sources, for the West cylinder and EW polarisation, as a function of frequency bin and position along the cylinder. White regions are flagged out in various ways during the averaging procedure (RFI frequency mask, by-hand bad channel mask, and bad Gaussian fits). The panels are ordered by decreasing declination, which is shown (rounded to an integer) in the subtitle of each plot. However, the distribution is not symmetric about zenith, with PerB at $3^{\circ}$ off zenith. \newline At high declinations the EW polarisation shows the same scaling with frequency and oscillation we expect, as well as the slightly wider beams we expect, across the cylinder. At low declinations the same structure appears at the south end of the cylinders, although the rippling is faster.}
-\end{center}
-\end{figure}
-
-
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=.8\textwidth]{figures/hol_other/dd_cen_Ecyl_Npol.png}
-\caption{The centroids for the 6 sources, for the East cylinder and NS polarisation. White regions are flagged out in various way during the averaging procedure (RFI frequency mask, by-hand bad channel mask, and bad Gaussian fits). The median centroid of each 2D map of the non-flagged data has been removed, but is plotted in Fig. \ref{devmedcen}. The panels are ordered by decreasing declination, which is shown (rounded to an integer) in the subtitle of each plot. Notice the range of the color scale, corresponding to the oscillation in centroid, increases with declination. The large scale variation with feed position follows a sort of S shape, but which flattens with decreasing declination. A large blue (``more negative than expected") region moves off the map (to the north) with decreasing declination.}
-\label{cenEN}
+\label{widthWE}
 \end{center}
 \end{figure}
 
 \begin{figure}[h!]
 \begin{center}
 \includegraphics[width=.8\textwidth]{figures/hol_other/dd_cen_Wcyl_Npol.png}
-\caption{The centroids for the 6 sources, for the West cylinder and NS polarisation. White regions are flagged out in various way during the averaging procedure (RFI frequency mask, by-hand bad channel mask, and bad Gaussian fits). The median centroid of each 2D map of the non-flagged data has been removed, but is plotted in Fig. \ref{devmedcen}. The panels are ordered by decreasing declination, which is shown (rounded to an integer) in the subtitle of each plot. Notice the range of the color scale, corresponding to the oscillation in centroid, increases with declination. \newline The large scale variation with feed position is relatively flat, except for a large blue (``more negative than expected") region at the center of the cylinder. The region moves left (to the north) with decreasing declination.}
+\caption{The centroids for 6 sources, for the West cylinder and NS polarisation. White regions are flagged out in various way during the averaging procedure (RFI frequency mask, by-hand bad channel mask, and bad Gaussian fits). The median centroid of each 2D map of the non-flagged data has been removed. The panels are ordered by decreasing declination, which is shown (rounded to an integer) in the subtitle of each plot. Notice the range of the color scale, corresponding to the oscillation in centroid, increases with declination. The large scale variation with feed position is relatively flat, except for a large blue (``more negative than expected") region at the center of the cylinder. The region moves left (to the north) with decreasing declination.}
 \label{cenWN}
 \end{center}
 \end{figure}
 
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=.8\textwidth]{figures/hol_other/dd_cen_Ecyl_Epol.png}
-\caption{The centroids for the 6 sources, for the East cylinder and EW polarisation. White regions are flagged out in various way during the averaging procedure (RFI frequency mask, by-hand bad channel mask, and bad Gaussian fits). The median centroid of each 2D map of the non-flagged data has been removed, but is plotted in Fig. \ref{devmedcen}. The panels are ordered by decreasing declination, which is shown (rounded to an integer) in the subtitle of each plot. Notice the range of the color scale, corresponding to the oscillation in centroid, increases with declination. \newline The large scale variation with feed position mirrors Fig. \ref{cenEN}, which is the same cylinder but other polarisation, but exhibits its own small scale fluctuation structure.}
-\label{cenEE}
-\end{center}
-\end{figure}
+To get an overall view of the redundancy of the array, we fit the peak of the averaged holographic visibilities with a three-parameter (centroid, width, and amplitude) Gaussian. We display selected examples of these fits in Figures \ref{widthWE}, and \ref{cenWN}. 
 
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=.8\textwidth]{figures/hol_other/dd_cen_Wcyl_Epol.png}
-\caption{The centroids for the 6 sources, for the West cylinder and EW polarisation. White regions are flagged out in various way during the averaging procedure (RFI frequency mask, by-hand bad channel mask, and bad Gaussian fits). The median centroid of each 2D map of the non-flagged data has been removed, but is plotted in Fig. \ref{devmedcen}. The panels are ordered by decreasing declination, which is shown (rounded to an integer) in the subtitle of each plot. Notice the range of the color scale, corresponding to the oscillation in centroid, increases with declination. 
-\newline The large scale variation with feed position mirrors its own cylinder other polarisation case (Fig. \ref{cenWN}), but has similar small scale fluctuation structure to the same polarisation of the East cylinder (Fig. \ref{cenEE}).}
-\label{cenWE}
-\end{center}
-\end{figure}
+Figure \ref{widthWE} shows the FWHM of the fits for the West cylinder and EW polarization for the entire band and all feeds. This is generally representative of other cylinders and polarizations, displaying the width oscillation in frequency and general constancy across feeds with some structure at low-declinations. This suggests that the FWHM are not sensitive to cylinder distortions, except at low declinations. This cylinder-polarization was chosen because it displays the most structure.
 
-An advantage of a phased array such as the CHIME pathfinder is the high redundancy of its baselines, due to the placing of the feeds on a regularly spaced grid. This choice, while not ideal for imaging, provides maximal sensitivity for a selected number of spatial Fourier modes. As well, it can greatly simplify the task of calibrating such a large number of antennas \citep{redundantbaselines}, as each redundant baseline should see the same sky. Unfortunately, variations in the primary beam from antenna to antenna break the redundancy to some degree and so complicate this analysis.
-
-One of the biggest advantages of our holographic set up is that a single scan correlates the 26 m reference beam with the entire CHIME Pathfinder array, and so provides high signal-to-noise ratio measurements of each feed individually, at each frequency. Knowledge of the difference between feeds can be used produce an accurate estimate of the true sky modes, restoring the redundancy of the array. 
-
-To get an overall view of the redundancy of the array, we fit the averaged holographic visibilities with a centroid 
-
-In the centroids we observe large scale structure which is correlated with the cylinder and seemingly unpolarized, while the small scale position-frequency dependent oscillations seem to be polarisation dependent. We also see that the obvious large deviations in centroid in both cylinders move with declination, which could suggest the location of a large deviation on the cylinder's surface. See Figure \ref{unknown} for the relevant geometry. Seth and Emilie checked this and confirmed the geometry using a few bright point sources on Pathfinder data. Fig. \ref{confirm} confirms that the feature maps to a location on the cylinder in the holography data as well. Finally, we observe that the south end of the cylinder develops considerable position-frequency dependent structure (in both widths and centroids) with decreasing declination. A possible explanation for this could be related to the multi-bounce nature of the beams.
-
-
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=.4\textwidth]{figures/hol_other/dev_med_cen.png}
-\end{center}
-\caption{The median centroids that were removed from the previous four plots (Figs. \ref{cenEN}, \ref{cenWN}, \ref{cenEE}, \ref{cenWE}), plotted against the expectation for a 1.9 degree rotated cylinder.}
-\label{devmedcen}
-\end{figure}
-
+In the centroids we observe large scale structure which is correlated with the cylinder position. We show it for the West cylinder in Figure \ref{cenWN}. The East shows a similar dip, however at a different location (more towards the North edge). The large-scale structure is observed to be unpolarized, while the small scale position-frequency dependent oscillations are polarisation dependent. We also see that the obvious large deviations in centroid in both cylinders move with declination.
 
 \subsection{Evidence for a multi-bounce model}
 
-
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=.6\textwidth]{figures/hol_other/Unknown.png}
+\includegraphics[width=.85\textwidth]{figures/hol_other/Unknown.png}
 \end{center}
-\caption{The geometry of the various bounces we expect to contribute to interference and therefore oscillatory features in frequency (image provided by Matt).}
+\caption{The geometry of the various bounces we expect to contribute to interference and therefore oscillatory features in frequency.}
 \label{unknown}
 \end{figure}
 
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=.4\textwidth]{figures/hol_other/cyl_rescale.png}
-\end{center}
-\caption{The first panel of this figure shows the median centroid across frequency plotted against feed position for the EW polarisation on the West cylinder. This corresponds to a median in the vertical direction of the panels (sources/declinations) of Fig. \ref{cenWN} (but with the median of the whole 2D map restored). The bottom panel shows the same data rescaled to map to the location of the first bounce on a hypothetical infinite cylinder given the declination of the source.}
-\label{confirm}
-\end{figure}
-
-Based on the geometry in Figure \ref{unknown}, the interference which sources the width oscillation could come from three major contributions, each of which would have a different lag/additional path length behavior with declination. In Figures \ref{feed10}, \ref{widthoscfit} and \ref{amposcfit}, we show evidence that it is the blue case which is contributing the most. Figure \ref{feed10} shows that the period of the width oscillation as a function of angle from zenith fits the additional path length geometry. Figures \ref{widthoscfit} and \ref{amposcfit} show that this behavior drops off towards the south end of the cylinder.
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=.5\textwidth]{figures/hol_other/width_osc_period_chid10.png}
-\caption{In blue is the period of a fit to the width oscillation in MHz for 5 different sources (3C295, PerB, TauA, VirA, HerA), as a function of their declinations (angle from zenith $\theta$ is decreasing along the x-axis). The green line corresponds to the prediction for the period based on the path length difference corresponding to the blue and green lines in Figure \ref{unknown}. This is for a single EW polarisation feed on the East cylinder.}
-\label{feed10}
-\end{center}
-\end{figure}
+A basic two-dimensional Fourier transform of a single high S/N holography beam reveals a complicated multi-peaked structure. These are generally causal and so can be interpreted as second and third bounces contributing to interference effects in the beam. In the previous section we discussed how obvious large deviations in the centroid in both cylinders are seen that move with declination and depend on cylinder, but the location of which is not polarized. If the centroids are sensitive to interference effects, this suggests a corresponding location of a large distortion on the cylinder's surface. Figure \ref{unknown} shows a side view of one cylinder with the 0.3 m-spaced feeds in red, and various possible paths for light rays shown in different colors. 
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=.6\textwidth]{figures/hol_other/width_osc_period_1d_eastcyl.png}
-\caption{The data explained in Figure \ref{feed10} is shown but now for all feeds on the East cylinder. The x-axis now shows position along the cylinder, while the colors show the different sources (in order or decreasing declination).}
-\label{widthoscfit}
+\includegraphics[width=.48\textwidth]{figures/hol_other/cyl_rescale.png}
+\includegraphics[width=.48\textwidth]{figures/hol_other/width_osc_period_chid10.png}
+\caption{Left: The first panel of this figure shows the median centroid across frequency plotted against feed position for the EW polarisation on the West cylinder. This corresponds to a median in the vertical direction of the panels (sources/declinations) of Fig. \ref{cenWN} (but with the median of the whole 2D map restored). The bottom panel shows the same data rescaled to map to the location of the first bounce on a hypothetical infinite cylinder given the declination of the source. The bump corrensponds to a fixed position on the rescaled cylinder (around position 55).
+\newline
+Right: In blue is the period of a fit to the width oscillation in MHz for 5 different sources, as a function of their declinations (angle from zenith $\theta$ is decreasing along the y-axis). The green line corresponds to the prediction for the period based on the path length difference corresponding to the blue and green lines in Figure \ref{unknown}. This is for a single EW polarisation feed on the East cylinder. \label{confirm}}
 \end{center}
 \end{figure}
 
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=.6\textwidth]{figures/hol_other/width_osc_amplitude_1d_eastcyl.png}
-\caption{The same as Figure \ref{widthoscfit} but for the amplitude of the FWHM oscillation.}
-\label{amposcfit}
-\end{center}
-\end{figure}
+The right panel of Fig. \ref{confirm} confirms that the dip in the centroids maps to a fixed location on the cylinder, by scaling the feed positions for each source to the location of the first bounce (orang line in Figure \ref{unknown}). Also, we observe that the south end of the cylinder develops considerable position-frequency dependent structure (in both widths and centroids) with decreasing declination.
+
+Based on the geometry in Figure \ref{unknown}, the interference which sources the width oscillation could come from three major contributions, each of which would have a different lag/additional path length behavior with declination. The right panel in Fig. \ref{confirm} shows that the period of the width oscillation as a function of angle from zenith fits the additional path length geometry corresponding to the blue case in Fig. \ref{unknown}. In Appendix \ref{app:hol:sec:model}, we provide some mathematical details of how the surface structure is linked to interference effects in the beam.
 
 \section{Simulations} \label{ch:hol:sec:sims}
 
@@ -445,32 +373,43 @@ Our simulation code uses the publicly available radio cosmology codes \texttt{co
 
 \subsection{Extended sources}
 
-Inspecting our list of sources there are two examples, Virgo A and Taurus A, which have angular extent on or near the resolution of our longest 26 m-Pathfinder baseline at 800 Mhz, of about $7'$. 
-\begin{figure}[h!] % not h only
-	\centering	
-	\includegraphics[width=0.95\textwidth]{figures/spie/extended_taua.png}%
-	\caption{The amplitudes of the simulated Taurus A beam slices for three flux distribution models of increasing realism, at 440 and 760 MHz. Only in the unrealistic model of an ellipsoid of uniform surface brightness do we observe frequency dependent effects in the recovered beam.}
-	\label{crabsim}
-\end{figure}
-
-Taurus A is a $\sim 4.5'\times 7'$ (at the limit of our maximum angular resolution) ellipsoid whose emission is quite spread across its surface area \citep{crab}. We simulate three cases: the ideal point source, one where the flux is evenly spread over the entire ellipsoid, and the most realistic model where a dense core of $30\%$ of the surface area contains $50\%$ of flux. We also tilt the ellipse at $45^{\circ}$. Figure \ref{crabsim} displays the results of our simulations for the three Taurus A models. Only in the unrealistic case of uniform surface brightness do we see frequency dependent effects in the holographic slices.
-
-Virgo A consists of a bright core containing about 90$\%$ of the flux and a diffuse halo extending to $14'$ \citep{baars, m87lofar}. We simulate this by comparing a sky which contains only a single non-zero pixel containing all of the flux of Virgo A, to a single pixel with 90$\%$ of the flux surrounded by a $14'$ circular halo. We see no difference in the recovered beam shape in either case.
-
-These results indicate that we do not resolve any of our sources and such effects are not present in our recovered holographic beam.
+\begin{table}[ht]
+\caption{Approximate angular extent for the observed point sources.} 
+\label{tab2}
+\begin{center}
+\begin{tabular}{| c  | c |}
+\hline
+ Source  & extent  \\ \hline
+Cygnus A & 1.5' \\ \hline
+Cassiopeia A & 4.8' \\ \hline
+Taurus A & 7' \\ \hline
+Virgo A & 14' \\ \hline
+Hydra A & 8' \\ \hline
+Perseus B  & 6'' \\ \hline
+3C\_295 & 40'' \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
 
 \begin{figure}[h!]
+\begin{center}
 \includegraphics[width=0.8\textwidth]{figures/hol_other/pixelized_sources.png}
-\caption{blaaaaaaa wtf}
+\caption{Cartesian projections of the high-resolution models of the four simulated sources, at a single frequency, for \texttt{nside} of 4096.}
 \label{pixelized_sources}
+\end{center}
 \end{figure} 
+
+Inspecting our list of sources there are several examples which have angular extent on or near the resolution of our longest 26 m-Pathfinder baseline at 800 Mhz, of about $7'$. We simulate the four brightest point sources: Cygnus A (CygA), Cassiopeia A (CasA), Taurus A (TauA), and Virgo A (VirA). These span the interesting range of angular extent and declination. To construct accurate models of the points sources we perform a pixel-by-pixel logarithmic interpolation between LOFAR ($\sim 200$ MHz) and VLA (1420 MHz) high resolution images of the sources, into the CHIME band. We then downgrade these onto high-resolution \texttt{healpix} maps (usually \texttt{nside} of 4096, although we test 8192 for TauA as well) for input into the simulation software described above. We then rescale maps so that the total integrated flux gives the expected flux based on the fits described in Section \ref{ch:hol:sec:data}. In Figure \ref{pixelized_sources}, we show Cartesian projections of the \texttt{heapix} maps for the four sources at a single frequency, for \texttt{nside} of 4096.
+
+In all cases we observe negligible frequency dependent effects in the recovered shape of the holographic slices. However we do see that over three quarters of the expected flux (in the case of VirA) can be resolved out by the 26 m-Pathfinder baseline, at the high end of the band. These results are shown in Figure \ref{resolved_flux}.
 
 \begin{figure}[h!]
+\begin{center}
 \includegraphics[width=0.8\textwidth]{figures/hol_other/resolved_flux.png}
-\caption{blaaaaaaaa wtf}
+\caption{The ratio of holography amplitudes in simulations with high resolution models of the point sources to a single-pixel model with the same integrated flux, shown for the four brightest observed sources as a function of observing cylinder, polarization and frequency.}
 \label{resolved_flux}
+\end{center}
 \end{figure} 
-
 
 \subsection{Foreground contamination}
 Another concern is Galactic or nearby point source contamination in the holographic measurements. To include the effects of the unknown primary beam of the tracking dish (in our case the 26 m), we simulate two noiseless models. The first is a a Gaussian 26 m beam, which therefore has no sidelobes. To include the effects of sidelobes of the tracking dish in a ``worst-case-scenario'' for a holographic measurement, we simulate an ``Exptan beam'' model which refers to the angular dependence of the theoretical illumination of a dipole feed in the aperture plane\citep{mmodes2}. This model consists of a paraboloidal dish with the geometry of the 26 m illuminated by a Pathfinder dipole feed (essentially the dish version of the fiducial Pathfinder beam model). This is a ``worst-case scenario'' as its aperture (owing to the larger focal length of the 26 m) is over-illuminated leading to maximal sidelobes, and so does not reflect the reality of our 26 m setup.
@@ -482,13 +421,12 @@ Another concern is Galactic or nearby point source contamination in the holograp
 	\label{cygasim}
 \end{figure}
 
-
 Figure \ref{cygasim} shows the results for Cygnus A, which we have simulated at several different frequencies across the band and compare a sky with only one non-zero pixel to the full sky model. Cygnus A is the brightest source in the sky in the CHIME band and so shows the highest S/N sidelobe structure, but nonetheless has significant Galactic flux in its neighborhood. We see no deviation from the single point source slice in all cases.
 
 As one descends in flux of the primary source, the distribution of point sources in the surroundings will change from Poissonian to Gaussian. We have also simulated the two less bright sources, Perseus B, and 3C295, but these are still among the brightest sources in the sky, and so we do not observe deviations between the single point source cases at any level of interest for our observations. To address the question of the minimum flux of primary source permitted for an unbiased measurement of the beam we require an accurate model of the 26 m, which we leave for a later work.
 
-\section{Paper Conclusion} \label{ch:hol:sec:conclusion}
+\section{Conclusion} \label{ch:hol:sec:conclusion}
 
-In this document, we have described and validated our technique of radio holography of bright astronomical point sources for obtaining high signal-to-noise (S/N) measurements, with good angular resolution, of the two-dimensional primary beams of the CHIME Pathfinder array across its frequency band. We have reported our progress in equipping the John A. Galt 26 m telescope with custom instrumentation for the purpose, and displayed the output of the method for a preliminary data set of 8 sources of minimal depth. 
+In this chapter, we have described and validated our technique of radio holography of bright astronomical point sources for obtaining high signal-to-noise (S/N) measurements, with good angular resolution, of the two-dimensional primary beams of the CHIME Pathfinder array across its frequency band. We have reported our progress in equipping the John A. Galt 26 m telescope with custom instrumentation for the purpose, and displayed the output of the method for a preliminary data set of 8 sources. We have described the development of a data analysis pipeline which maps these measurements exactly onto the sky, converges to the true beam in the limit of dense declination sampling, and produces beam transfer matrices which are the direct input into the Pathfinder mapmaking software. The recovered beams can then be validated based on their ability to reduce artifacts and correct beam-induced errors seen in maps made with minimal beam information. This discussion is the topic of Chapter \ref{chap:mapmaking}.
 
-It is clear from the data that more integration time is necessary for the low S/N sources to begin to measure the sidelobe structure seen in the best sources. From Figure \ref{full2dbeam} we see that the seven sources for which we have holography do not fully sample the two-dimensional structure in our model of the CHIME beams. The basic program is to use these holographic measurements to test and refine our beam models. Additionally, we plan to augment our holographic observations with additional sources which were not favorably located during the period these data were collected. However, our analysis of Section \ref{ch:hol:sec:sims} suggests that there is a minimum primary source flux at which one can expect to obtain a reasonable beam trace. In addition to the holography method presented here, we are pursing other methods of filling in the NS beam structure, notably with satellites\citep{hol2, sat2}, drones \citep{drone}, and pulsar holography. In its current form the data presented here serve as a basis for an understanding of the primary beam of a realistic cylindrical telescope array, such as CHIME and its Pathfinder.
+In addition to the holography method presented here, CHIME is pursing other methods of filling in the NS beam structure, notably with satellites\citep{hol2, sat2}, drones \citep{drone}, and pulsar holography. In its current form the data presented here serve as a basis for an understanding of the primary beam of a realistic cylindrical telescope array, such as CHIME and its Pathfinder.

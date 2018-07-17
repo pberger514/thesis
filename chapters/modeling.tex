@@ -1,3 +1,101 @@
 \chapter{\label{chap:signal} Modeling the 21 cm line}
 
-Test.
+\newpage
+
+\section{Introduction}
+\label{ch:signal:sec:intro}
+
+The current and upcoming generation of 21 cm Line Intensity Mapping (21 cm LIM) surveys promises a minimum order-of-magnitude increases in sensitivity, leading to the ever-elusive detection of the 21 cm auto-power spectrum. These surveys promise to offer unprecedented insights into the invovlement of neutral hydrogen (HI) in early galaxy formation and evolution, and compliment state-of-the-art galaxy survey techniques in enormous volumes of the universe.
+
+However, it is known that cosmological parameter inference from measurements of the amplitude of the auto- and cross-power spectra exhibit degeneracies between the parameters of interest. These include astrophysical parameters like the Universal abundance of HI, and others such the bias and stochasticity, which depend sensitively on the clustering properties and astrophysics of the underlying populations, but also on the details of the survey selection functions and geometries. An interesting demonstration of this has been performed recently at low-redshifts \citep{andersonetalparkes}, for the first time in the intensity mapping regime, which showed that HI ``avoids'' old red galaxies and prefers young blue ones. This is a tantalizing taste of the power of 21 cm LIM to trace star formation and galaxy evolution across redshift.
+
+However, modeling of the 21 cm line at intermediate redshifts is on shaky footing due not only to the difficulty of modeling a biased tracer of the non-linear matter distribution \citep{biasreview}, but also to the complicated baryonic physics involved. Recent attempts to reconcile various large-scale tracers of the HI abundance have met with difficulty \citep{pad2015, castorina2016}, possibly due to the limitations of these over-simplified analytic models. Novel techniques such as redshift-space distortions, or others that exploit the shape of the power spectrum \citep{wolz2017}, will hope to break these degeneracies, but are accompanied with their own systematics. High-resolution hydrodynamic simulations (hydro sims) suffer from resolution-dependent results, require fine-tuning of subgrid physics and feedback mechanisms, and predict a highly dynamic and variable environment for neutral hydrogen \cite{firehi} leading to complex phenomenology \citep{illustristng21cm}.
+
+Conversely, for modern large-scale structure surveys with complicated systematics, it has become standard pratice to test data analysis pipelines on large sets of mock simulations. The number of simulations required to accurately estimate covariances is currently prohibitive for full dark matter only N-body simulations, let alone include the effects of baryons. Furthermore, for full-sky 21 cm LIM, one encounters large-scale environmental effects not yet studied in high-resolution simulations \citep{pontzenbias, tidalsims} and foreground filtering techniques which operate on the entire observed volume \cite{ffska}.
+
+By definition, however, in LIM one does not resolve individual galaxies but only the smoothed integrated emission from all HI. Evidence from hydro sims \cite{pontzen2008, bagla2010, vn2014, illustristng21cm} suggest that halos with circular velocities above 30 km/s can sufficiently self-shield and host significant HI. This presents a significant dynamic range to be resolved in simulation. In Figure \ref{f_hi_of_mh}, we compute $f_{\rm HI}(>M_h)$, the fraction of HI in halos above some mass $M_h$, 
+\begin{equation}
+f_{\rm HI}(>M_h) \equiv \frac{\int_{M_h}^\infty M_{\rm HI}(M) n(M) dM}{\int_0^\infty M_{\rm HI}(M) n(M) dM}, \label{f_hi_def}
+\end{equation}
+where $n(M)$ is the halo mass function (HMF) and $M_{\rm HI}(M)$ is the halo mass to HI relation. For this illustration we show two parametrizations of $M_{\rm HI}(M)$: the fit to hydro sim results from \citeauthor{illustristng21cm} and the Monte-Carlo Markov Chain (MCMC) best fit to a collection of low-redshift HI galaxy surveys, intermediate redshift 21 cm LIM, and damped Lyman-alpha data from \citeauthor{pad2016}. Figure \ref{f_hi_of_mh} shows how a significant fraction of HI is expected to come from intermediate-to-low mass halos, and that halos above $10^9 M_\odot$ should host all the HI to within a few percent.
+\begin{figure}[h!] % not h only
+\begin{center}
+\includegraphics[width=0.6\textwidth]{figures/subgrid/f_hi_of_mh.png}%
+\caption{The fraction of HI contained in halos above $M_h$, $f_{\rm HI}(>M_h)$, defined in Eq. \ref{f_hi_def}. We show the quantity for two parametrizations of the halo mass to HI mass relation, and redshifts 0, 1, 2, and 3 are coloured with decreasing darkness.}
+\label{f_hi_of_mh}
+\end{center}
+\end{figure}
+Given the low resolution (modulo spectral) of LIM experiments, it is unclear what effect this population has on the linear and quasi-linear scales relevant, for example, for the Baryon Acoustic Oscillations (BAO). It is clear, however, that given the power law scaling of the low-mass tail of the HMF, for simulation techniques the number of halos hosting HI in a cosmological volume can quickly become cumbersome.
+
+In this work, therefore, we adopt a sub-grid scheme and model the 21 cm LIM signal as a combination of halo and continuous field components. We produce a set of high resolution cosmological simulations, which resolve the entire relevant population of dark matter halos, and use them to validate and test our sub-grid method. We employ the Peak Patch \citep{peakpatch1} method for our simulations, which we have augmented with the MUSIC multi-scale initial conditions solver allowing us the to reach the target resolution. 
+
+This chapter is organized as follows: In Section \ref{ch:signal:sec:music}, we discuss our combination of the MUSIC and Peak Patch codes which allows us to generate coherent initial conditions on the fly. In Section \ref{ch:signal:sec:gppbs}, we present the mathematical preliminaries for our sub-grid biasing method, which is based on the Peak Background Split \cite{schmidt2013} and uses Gaussian Processes \cite{rasmussenandwilliams} to fit and extrapolate the conditional HMF. In Section \ref{ch:signal:sec:sims}, we present the set of high-resolution simulations we use in Section \ref{ch:signal:sec:results} to test our method. Finally, in Section \ref{ch:signal:sec:conclusion}, we discuss our results and the implications for more accurate modeling of 21 cm LIM.
+
+\section{Multi-Scale Initial Conditions for Peak Patch}
+\label{ch:signal:sec:music}
+
+We generate dark matter halo catalogues with the Peak Patch method, for which we provide a brief description of the relevant aspects here. For further details please refer to Refs. \citep{peakpatch,peakpatch2,peakpatch3}. Peak Patch (PP) identifies dark matter halos from the cosmological initial conditions (Lagrangian space) by performing spherically averaged measurements of both the linear density and tidal tensor at locations of candidate peaks of the density field. A PP halo is therefore the largest spherical region of Lagrangian space which satisfies the conditions for ellipsoidal collapse at the target redshift. Therefore its spherically averaged density can be interpreted as its collapse barrier, analagous to tracing N-body halos identified in the completed simulation (Eulerian space) back to initial conditions and measuring the initial density. PP halos, though, are not purely the result of integrating the ellipsoidal collapse equations, since exclusion is enforced through a higherarchical binary merging algorithm on candidate peaks. The final halos are then moved to Eulerian space using second-order Lagrangian perturbation theory. Peak Patch has passed extensive validations against many modern simulation methods \cite{euclidcp1, euclidcp2, euclidcp3}.
+
+In order to push the low mass resolution limit of the Peak Patch code, we have combined it with a new method for generating initial conditions (ICs). Ensuring large-scale coherence of the ICs is the most non-local step in the PP algorithm. In the standard monolithic box approach, cubic periodic ICs for the entire simulation volume are generated in a preliminary step. Parallelization across many processors is achieved using a slab domain decomposition and Fast Fourier Transforms (FFT). However, the PP calculation itself takes place in cubic sub-regions, and for large volumes a single processor is required to perform many such computations. Each processor must therefore hold a slice of the full simulation volume in its local memory to be requested at some point in the computation. While this solution is extremely fast and ideal for Monte-Carlo iteration, the global field is a considerable memory overhead and it is not well suited to non-cubic survey geometries (e.g. pencil surveys). The Multi-Scale Initial Conditions (MUSIC) \citep{music} code is an initial conditions solver for cosmological zoom-in simulations. It is designed to re-sample a high-resolution ``refinement region'' from within a previously run coarse resolution simulation, achieving $10^{-4}$ errors. MUSIC uses a multi-grid algorithm where a pre-determined grid of seeds for the pseudo-random number generator is assigned to each power of 2 refinement level. Parallelization is therefore trivial. MUSIC allows for each PP sub-domain to request its ICs on the fly, and the entire simulation volume need never be realized simultaneously. This ``streaming''-style parallelization allows processors to ``stream'' through the sub-domains one at a time, alleviating memory requirements and allowing effectively arbitrary resolution/box size (limited only by compute time).
+
+\begin{figure}[h!] % not h only
+\begin{center}
+\includegraphics[width=0.8\textwidth]{figures/subgrid/density_octants_residuals.png}%
+\caption{A single-cell thick slice through the residuals of the initial density field, $\delta$, generated with 2 tiles (meaning 8 MUSIC volumes were computed independently) compared to the unigrid simulation with the same seed. We observe $\sim 10^{-4}$ errors in the density.}
+\label{density_octants_residuals}
+\end{center}
+\end{figure}
+
+In Figure \ref{density_octants_residuals}, we show the residuals of the initial density field, $\delta$, generated with 2 tiles (meaning 8 MUSIC volumes were computed independently) compared to the unigrid simulation with the same seed. For this visualization, we computed at 512 Mpc with 1 Mpc resolution and show a single 1 Mpc-thick slice. We observe $\sim 10^{-4}$ errors with some large-scale behaviour, however the errors are dominated by small-scale fluctuations consistent with Ref. \cite{music}. The PP computation requires a buffer region equal to radius of the largest halo one expects to find in the full simulation. This buffer is requested from MUSIC but then cut out for the visualization, which mitigates edge errors from MUSIC in the active region and accounts for the visible boundaries in Figure \ref{density_octants_residuals}.
+
+\begin{figure}[h!] % not h only
+\begin{center}
+\includegraphics[width=0.6\textwidth]{figures/subgrid/pk_pp_vs_music_512Mpc_check.png}%
+\caption{The power spectra of 32 Peak Patch simulations computed with MUSIC compared to unigrid initial conditions. For this test the boxes are 512 Mpc with 1 Mpc resolution at redshift 0. There are 4 MUSIC tiles meaning 64 sets of initial conditions are compute independently to produce the entire simulation volume.}
+\label{pkcheck}
+\end{center}
+\end{figure}
+
+In Figure \ref{pkcheck}, we compute the power spectrum of halo catalogs generated with 4 tiles (so 64 independent MUSIC volumes) as well as the standard implementation, for 32 independent realizations of each method.
+
+\section{Gaussian Processes and the Peak Background Split}
+\label{ch:signal:sec:gppbs}
+
+Mathematical preliminaries.
+
+\section{Simulations}
+\label{ch:signal:sec:sims}
+
+Description of high resolutions simulations used to test method.
+
+\begin{figure}[h!] % not h only
+\begin{center}
+\includegraphics[width=\textwidth]{figures/subgrid/1Gpc_patchplot_z2_Mcut1e12_10Mpc.png}%
+\caption{A 10 Mpc slice of a 1 Gpc simulation at redshift 2, with 0.125 Mpc resolution. Halos above $10^{12}$ $M_\circ$ are coloured orange.}
+\label{musicslice}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!] % not h only
+\begin{center}
+\includegraphics[width=\textwidth]{figures/subgrid/dndm_1Gpc_8192_z2.png}%
+\caption{The mass function of a 1 Gpc simulation at redshift 2, with 0.125 Mpc resolution.}
+\label{musicdndm}
+\end{center}
+\end{figure}
+
+\section{Results}
+\label{ch:signal:sec:results}
+
+The measurments of the bias parameters.
+
+\begin{figure}[h!] % not h only
+\begin{center}
+\includegraphics[width=\textwidth]{figures/subgrid/gp_fit_dndm.png}%
+\caption{A fit to the mass function using one and two Gaussian processes.}
+\label{gpfit}
+\end{center}
+\end{figure}
+
+\section{Conclusion}
+\label{ch:signal:sec:conclusion}
