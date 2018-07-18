@@ -29,7 +29,7 @@ Given the low resolution (modulo spectral) of LIM experiments, it is unclear wha
 
 In this work, therefore, we adopt a sub-grid scheme and model the 21 cm LIM signal as a combination of halo and continuous field components. We produce a set of high resolution cosmological simulations, which resolve the entire relevant population of dark matter halos, and use them to validate and test our sub-grid method. We employ the Peak Patch \citep{peakpatch1} method for our simulations, which we have augmented with the MUSIC multi-scale initial conditions solver allowing us the to reach the target resolution. 
 
-This chapter is organized as follows: In Section \ref{ch:signal:sec:music}, we discuss our combination of the MUSIC and Peak Patch codes which allows us to generate coherent initial conditions on the fly. In Section \ref{ch:signal:sec:gppbs}, we present the mathematical preliminaries for our sub-grid biasing method, which is based on the Peak Background Split \cite{schmidt2013} and uses Gaussian Processes \cite{rasmussenandwilliams} to fit and extrapolate the conditional HMF. In Section \ref{ch:signal:sec:sims}, we present the set of high-resolution simulations we use in Section \ref{ch:signal:sec:results} to test our method. Finally, in Section \ref{ch:signal:sec:conclusion}, we discuss our results and the implications for more accurate modeling of 21 cm LIM.
+This chapter is organized as follows: In Section \ref{ch:signal:sec:music}, we discuss our combination of the MUSIC and Peak Patch codes which allows us to generate coherent initial conditions on the fly. In Section \ref{ch:signal:sec:gppbs}, we present the mathematical preliminaries for our sub-grid biasing method, which is based on the Peak Background Split \citep{schmidt2013} and uses Gaussian Processes \cite{rasmussenandwilliams} to fit and extrapolate the conditional HMF. In Section \ref{ch:signal:sec:sims}, we present the set of high-resolution simulations we use in Section \ref{ch:signal:sec:results} to test our method. Finally, in Section \ref{ch:signal:sec:conclusion}, we discuss our results and the implications for more accurate modeling of 21 cm LIM.
 
 \section{Multi-Scale Initial Conditions for Peak Patch}
 \label{ch:signal:sec:music}
@@ -61,7 +61,29 @@ In Figure \ref{pkcheck}, we compute the power spectrum of halo catalogs generate
 \section{Gaussian Processes and the Peak Background Split}
 \label{ch:signal:sec:gppbs}
 
-Mathematical preliminaries.
+To model the contribution to the 21 cm flux from the population of low-mass halos below the resolution of our simulation, we need to correctly bias the continuous field component. That is we would like to model the halo overdensity,
+\begin{equation}
+\delta_h(\vec{x}) \equiv \frac{n(\vec{x}) - \overline{n}}{\overline{n}},
+\end{equation}
+where $n(\vec{x})$ is the halo density and $\overline{n}$ is its Universal mean, as an expansion in the linear matter overdensity, $\delta(\vec{x})$. Above and in the following time dependence is supressed for simplicity but is implicit. The most general expansion consistent with stationarity, up to second order in $\delta(\vec{x})$ and up to two spatial derivatives is
+\begin{equation}
+\delta(\vec{x}) = b_1 \delta(\vec{x}) + b_2 \left( \delta(\vec{x})^2 - \langle \delta^2 \rangle \right)+ b_{\nabla^2\delta} \left( \nabla^2\delta(\vec{x}) - \langle \nabla^2\delta \rangle \right) + b_{s^2} \left( s^2(\vec{x}) - \langle s^2 \rangle \right), \label{general_bias_exp}
+\end{equation}
+where
+\begin{equation}
+s_{ij}(\vec{x}) = \left( \frac{\partial_i \partial_j}{\nabla^2} - \frac{1}{3}\delta^{\rm K}_{ij}\right) \delta(\vec{x}),
+\end{equation}
+is the Lagrangian anisotropic strain tensor, $s^2(\vec{x}) = \sum_{ij} s^2_{ij}(\vec{x})$, angled brackets denote an ensemble average, and $\delta_{ij}^{\rm K}$ is Kronecker delta. The first two $b$s in Eq. \ref{general_bias_exp} are termed local bias parameters, while those associated to spatial derivates are non-local since the derivatives introduce a dependence on the fluctuations in $\delta(\vec{x})$ about the field point in question $\vec{x}$. Several authors have reported significant detections of second (and higher)-order non-local bias parameters in Lagrangian \citep{shethetal2013, biagettietal2014, modietal2017, abidi+baldauf2018} and Eulerian space \cite{lazeyrasetal2017}.
+
+The Peak Background Split (PBS) is a prescription for determining the bias parameters, based on the argument that an initially overdense region should host more halos. In other words, the bias parameters measure the response of the halo density to variations in the underlying continuous field. Indeed, \citeauthor{schmidt2013} show, by defining the PBS in terms of variation of the mean density of the universe (the so-called \textit{separate universe} argument), one obtains precisely the local bias expansion. They then argue that for the case of a universal halo mass function these bias parameters are equivalent to those obtained from a standard variation of the collapse barrier. In this work, we generalize these results to include the non-local bias parameters. We measure the HMF conditionally on the averaged fields $x_i = \{\delta, \delta^2, \nabla^2\delta, s^2\}$, and compute the responses marginalized over the other fields,
+\begin{equation}
+b_{x_i}(M_h) = \int_{x_j \neq x_i} \frac{\partial \overline{n}(M_h | x_j)}{\partial x_i},
+\end{equation}
+where the dependence on halo mass $M_h$ is now explicit. We consider each field to be independent, therefore Eq. \ref{general_bias_exp} is a \textit{linear} multivariable Taylor expansion, which explains the non-standard normalization of $b_2$ in Eq. \ref{general_bias_exp}.
+
+However, it is not known whether a universal expression for the HMF exists, and parametrization attempts suffer, for example, from details of the halo finder used \citep{desjacquesetal2018}. (Attempts to test the PBS on N-body simulations may suffer from such errors as well.) Therefore, in targeting sub-percent accuracy on the HMF, the authors of Ref. \citep{aemulushmf} abandon an explicit parametrization and use a Gaussian process model to interpolate between simulations and produce a HMF emulator.
+
+Gaussian processes are kernel-based methods, providing a Bayesian non-parametric approach for smoothing and interpolation in noisy datasets \citep{rasmussenandwilliams}, but which recently have received increased interest as a supervised machine learning technique capable of feature extraction and extrapolation \citep{wilsonandadams}. A distribution of functions $\mathbf{f}(x)$ is a Gaussian process if they are completely described by a mean $m(x) = \langle mathbf{f}(x) \rangle$ and a covariance $\mathrm{cov}[f(x), f(x')] = \langle (f(x) - \langle mathbf{f}(x') \rangle)  (f(x) - \langle mathbf{f}(x') \rangle)\rangle$.
 
 \section{Simulations}
 \label{ch:signal:sec:sims}
