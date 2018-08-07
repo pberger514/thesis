@@ -132,7 +132,7 @@ We further assume that the polarization pattern is given by a dipole in the dire
 \end{align}
 This can then be applied either to the averaged beam amplitude functions $A_i$  or its product can be applied to single or averaged baselines $A_jA_j$.
 
-\section{A multi-bounce model for the CHIME beam}
+\section{A ray tracing model for the CHIME beam}
 \label{app:hol:sec:model}
 
 \begin{figure}[h!]
@@ -348,6 +348,7 @@ The signal contribution is complicated, but the auto term is simplified by havin
 %The $\ell m$ structure of the covariance matrix depends on the sky statistics, but is diagonal for a Gaussian random field. 
 %\subsection{$m$-mode calculation with cross-talk} 
 %\label{app:hol:sec:noise:ss:fullcalcx}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -386,3 +387,26 @@ The last two terms can then be factored,
 \\ &- \mathbf{u}\mathbf{u}^\dagger\mathbf{A}^{-1} \otimes \mathbf{H}.
 \end{align}
 The result can similarly be shown for multiplication on the left.
+
+\section{Point source removal maps with CHIME Pathfinder data}
+\label{app:mm:sec:pfdata}
+
+Here, in Figures \ref{taua_comparison}  and \ref{casa_comparison}, we show the Cartesian projections 25 degrees around the expected locations of TauA and CasA, respectively, for the Stokes I maps from CHIME Pathfinder at the four selected frequencies 715.62, 683.98, 624.22, and 596.88 Mhz included in the analysis of Section \ref{ch:mm:sec:pfdata}.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.95\textwidth]{figures/pfmaps/taua_avhol_theory_rem_comp.png}
+\caption{Cartesian projected Stokes I maps from CHIME Pathfinder pass1-2 night, 25 degrees around the expected location of TauA. The rows correspond to the selected frequencies at 715.62, 683.98, 624.22, and 596.88 Mhz which overlap the night stack and holography beams. The two left and two right columns show the maps made using the holographic and theoretical beams, respectively. The first column in each half shows the standard Wiener filtered map while the second shows the residuals after point source removal.}
+\label{taua_comparison}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.95\textwidth]{figures/pfmaps/casa_avhol_theory_rem_comp.png}
+\caption{Cartesian projected Stokes I maps from CHIME Pathfinder pass1-2 night, 25 degrees around the expected location of CasA. The rows correspond to the selected frequencies at 715.62, 683.98, 624.22, and 596.88 Mhz which overlap the night stack and holography beams. The two left and two right columns show the maps made using the holographic and theoretical beams, respectively. The first column in each half shows the standard Wiener filtered map while the second shows the residuals after point source removal.}
+\label{casa_comparison}
+\end{figure}
+
+TauA is the calibrator source, therefore the maps and removal quality are most similar between holography and theory since the visibilities are set to have amplitude 1 and phase 0 for all feeds and frequencies there. Still, we observe for the holographic removed maps that the tracks from TauA through the side-lobes are all but entirely removed.
+
+For CasA, we see the most obvious evidence that frequency dependent effects on the diffuse component have been corrected by the averaged holographic beam in both the base map and removed case. This is clear by inspecting the background surrounding the source as a function of frequency (rows).

@@ -75,20 +75,30 @@ s_{ij}(\vec{x}) = \left( \frac{\partial_i \partial_j}{\nabla^2} - \frac{1}{3}\de
 \end{equation}
 is the Lagrangian anisotropic strain tensor, $s^2(\vec{x}) = \sum_{ij} s^2_{ij}(\vec{x})$, angled brackets denote an ensemble average, and $\delta_{ij}^{\rm K}$ is Kronecker delta. The first two $b$s in Eq. \ref{general_bias_exp} are termed local bias parameters, while those associated to spatial derivates are non-local since the derivatives introduce a dependence on the fluctuations in $\delta(\vec{x})$ about the field point in question $\vec{x}$. Several authors have reported significant detections of second (and higher)-order non-local bias parameters in Lagrangian \citep{shethetal2013, biagettietal2014, modietal2017, abidi+baldauf2018} and Eulerian space \cite{lazeyrasetal2017}.
 
-The Peak Background Split (PBS) is a prescription for determining the bias parameters, based on the argument that an initially overdense region should host more halos. In other words, the bias parameters measure the response of the halo density to variations in the underlying continuous field. Indeed, \citeauthor{schmidt2013} show, by defining the PBS in terms of variation of the mean density of the universe (the so-called \textit{separate universe} argument), one obtains precisely the local bias expansion. They then argue that for the case of a universal halo mass function these bias parameters are equivalent to those obtained from a standard variation of the collapse barrier. In this work, we generalize these results to include the non-local bias parameters. We measure the HMF conditionally on the averaged fields $x_i = \{\delta, \delta^2, \nabla^2\delta, s^2\}$, and compute the responses marginalized over the other fields,
+The Peak Background Split (PBS) is a prescription for determining the bias parameters, based on the argument that an initially overdense region should host more halos. In other words, the bias parameters measure the response of the halo density to variations in the underlying continuous field. Indeed, \citeauthor{schmidt2013} show, by defining the PBS in terms of variation of the mean density of the universe (the so-called \textit{separate universe} argument), one obtains precisely the local bias expansion. They then argue that for the case of a universal halo mass function these bias parameters are equivalent to those obtained from a standard variation of the collapse barrier. In this work, we generalize these results to include the non-local bias parameters. We measure the HMF conditionally on the fields $X_i = \{\delta, \delta^2, \nabla^2\delta, s^2\}$ averaged over the halo, and compute the responses marginalized over the other fields,
 \begin{equation}
-b_{x_i}(M_h) = \int_{x_j \neq x_i} \frac{\partial \overline{n}(M_h | x_j)}{\partial x_i},
+b_{X_i}(M_h) = \int_{X_j \neq X_i} \frac{\partial \overline{n}(M_h | X_j)}{\partial X_i},
 \end{equation}
 where the dependence on halo mass $M_h$ is now explicit. We consider each field to be independent, therefore Eq. \ref{general_bias_exp} is a \textit{linear} multivariable Taylor expansion, which explains the non-standard normalization of $b_2$ in Eq. \ref{general_bias_exp}.
 
-However, it is not known whether a universal expression for the HMF exists, and parametrization attempts suffer, for example, from details of the halo finder used \citep{desjacquesetal2018}. (Attempts to test the PBS on N-body simulations may suffer from such errors as well.) Therefore, in targeting sub-percent accuracy on the HMF, the authors of Ref. \citep{aemulushmf} abandon an explicit parametrization and use a Gaussian process model to interpolate between simulations and produce a HMF emulator.
+However, it is not known whether a universal expression for the HMF exists, and parametrization attempts suffer, for example, from details of the halo finder used \citep{desjacquesetal2018}. (Attempts to test the PBS on N-body simulations may suffer from such errors as well.) Therefore, in targeting sub-percent accuracy on the HMF, the authors of Ref. \citep{aemulushmf} abandon a universal parametrization and use a Gaussian process model to interpolate between simulations and produce a HMF emulator.
 
-Gaussian processes are kernel-based methods, providing a Bayesian non-parametric approach for smoothing and interpolation in noisy datasets \citep{rasmussenandwilliams}, but which recently have received increased interest as a supervised machine learning technique capable of feature extraction and extrapolation \citep{wilsonandadams}. A distribution of functions $\mathbf{f}(x)$ is a Gaussian process if they are completely described by a mean $m(x) = \langle mathbf{f}(x) \rangle$ and a covariance $\mathrm{cov}[f(x), f(x')] = \langle (f(x) - \langle mathbf{f}(x') \rangle)  (f(x) - \langle mathbf{f}(x') \rangle)\rangle$.
-
+Gaussian processes are kernel-based methods, providing a Bayesian non-parametric approach for smoothing and interpolation in noisy datasets \citep{rasmussenandwilliams}, but which recently have received increased interest as a supervised machine learning technique capable of feature extraction and extrapolation \citep{wilsonandadams}. A distribution of functions $f(x)$ is a Gaussian process if it is completely described by its mean $m(x) = \langle f(x) \rangle$ and a covariance $\mathrm{cov}[f(x), f(x')] = \left\langle (f(x) - m(x))  (f(x') - m(x')) \right\rangle \equiv k(x, x')$, where $k(x,x')$ is called the covariance function or kernel. For a discrete set of measurements
+\begin{equation}
+\mathbf{y} = f(\mathbf{x}) + n(\mathbf{x}),
+\end{equation}
+where $n(x)$ is additive Gaussian distributed noise with mean 0 and covariance matrix $N_{pq} \equiv \langle n(x_p)n(x_q) \rangle$, the posterior mean at some requested set of points $\mathbf{x}_*$ is just the mean of the distribution conditioned on $\mathbf{y}$,
+\begin{equation}
+\langle f(\mathbf{x}_*) \rangle = m(\mathbf{x}_*) + k(\mathbf{x}_*, \mathbf{x}) \left( k(\mathbf{x}, \mathbf{x}) + N \right)^{-1} \mathbf{y}. \label{conditional_mean}
+\end{equation}
+The only unknown in Eq. \ref{conditional_mean} is the shape of the kernel $k(x, x')$, and so with Gaussian processes the task is to correctly model the covariance and then optimize its free parameters. Furthermore, since $k(x, x')$ is usually chosen to have some simple analytic form, the derivative of Eq. \ref{conditional_mean} with respect to the evaluation points $\mathbf{x}_*$ can be easily calculated as
+\begin{equation}
+\frac{\partial \langle f(\mathbf{x}_*) \rangle}{\partial \mathbf{x}_*} = \frac{\partial m(\mathbf{x}_*)}{\partial \mathbf{x}_*} + \frac{\partial k(\mathbf{x}_*, \mathbf{x})}{\partial \mathbf{x}_*} \left( k(\mathbf{x}, \mathbf{x}) + N \right)^{-1} \mathbf{y}. \label{d_of_cm}
+\end{equation}
 \section{Simulations}
 \label{ch:signal:sec:sims}
 
-Description of high resolutions simulations used to test method.
+The code modifications described in Section \ref{ch:signal:sec:music} have allowed us to compute a set of high-resolution simulations, targeting $10^9~M_\odot$ halos (following the discussion of Section \ref{ch:signal:sec:intro}), in a cosmological volume. We compute (1024 Mpc)$^3$ periodic cubic boxes at redshifts 0, 1, and 2, on an $8192^3$ grid, with 0.125 Mpc resolution. This results in a 30 cell of halo $1.97 \times 10^{9}~M_\odot$ and 100 cell halo of $6.58 \times 10^{9}~M_\odot$.
 
 \begin{figure}[h!] % not h only
 \begin{center}
@@ -98,6 +108,8 @@ Description of high resolutions simulations used to test method.
 \end{center}
 \end{figure}
 
+In Figure \ref{musicdndm}, we show the mass function of the redshift 2 simulation, compared to the \citeauthor{tinker2008} universal HMF, as well as the mass limits mentioned above. We observe a departure from the expected power law behaviour in the tail starting at about $2.5 \times 10^{9}~M_\odot$. However, we see from Figure \ref{f_hi_of_mh} that even a sharp mass cut at this halo mass would resolve within $1-2 \%$ of the 21 cm LIM flux.
+
 \begin{figure}[h!] % not h only
 \begin{center}
 \includegraphics[width=\textwidth]{figures/subgrid/dndm_1Gpc_8192_z2.png}%
@@ -105,6 +117,8 @@ Description of high resolutions simulations used to test method.
 \label{musicdndm}
 \end{center}
 \end{figure}
+
+In Figure \ref{musicslice}, we show a visualization of a thin slice through the entire 1 Gpc simulation volume at redshift 2. 
 
 \section{Results}
 \label{ch:signal:sec:results}
