@@ -29,7 +29,7 @@ Given the low resolution (modulo spectral) of LIM experiments, it is unclear wha
 
 In this work, therefore, we adopt a sub-grid scheme and model the 21 cm LIM signal as a combination of halo and continuous field components. We produce a set of high resolution cosmological simulations, which resolve the entire relevant population of dark matter halos, and use them to validate and test our sub-grid method. We employ the Peak Patch \citep{peakpatch1} method for our simulations, which we have augmented with the MUSIC multi-scale initial conditions solver allowing us the to reach the target resolution. 
 
-This chapter is organized as follows: In Section \ref{ch:signal:sec:music}, we discuss our combination of the MUSIC and Peak Patch codes which allows us to generate coherent initial conditions on the fly. In Section \ref{ch:signal:sec:gppbs}, we present the mathematical preliminaries for our sub-grid biasing method, which is based on the Peak Background Split \citep{schmidt2013} and uses Gaussian Processes \cite{rasmussenandwilliams} to fit and extrapolate the conditional HMF. In Section \ref{ch:signal:sec:sims}, we present the set of high-resolution simulations we use in Section \ref{ch:signal:sec:results} to test our method. Finally, in Section \ref{ch:signal:sec:conclusion}, we discuss our results and the implications for more accurate modeling of 21 cm LIM.
+This chapter is organized as follows: In Section \ref{ch:signal:sec:music}, we discuss our combination of the MUSIC and Peak Patch codes which allows us to generate coherent initial conditions on the fly. In Section \ref{ch:signal:sec:gppbs}, we present the mathematical preliminaries for our sub-grid biasing method, which is uses a Peak Background Split \citep{biasreview} estimator to measure and extrapolate the bias. In Section \ref{ch:signal:sec:sims}, we present the set of high-resolution simulations we use in Section \ref{ch:signal:sec:results} to test our method. Finally, in Section \ref{ch:signal:sec:conclusion}, we discuss our results and the implications for more accurate modeling of 21 cm LIM.
 
 \section{Multi-Scale Initial Conditions for Peak Patch}
 \label{ch:signal:sec:music}
@@ -58,7 +58,7 @@ In Figure \ref{density_octants_residuals}, we show the residuals of the initial 
 
 In Figure \ref{pkcheck}, we compute the power spectrum of halo catalogs generated with 4 tiles (so 64 independent MUSIC volumes) as well as the standard implementation, for 32 independent realizations of each method.
 
-\section{Gaussian Processes and the Peak Background Split}
+\section{Extrapolating the Peak-Background Split}
 \label{ch:signal:sec:gppbs}
 
 To model the contribution to the 21 cm flux from the population of low-mass halos below the resolution of our simulation, we need to correctly bias the continuous field component. That is we would like to model the halo overdensity,
@@ -67,40 +67,51 @@ To model the contribution to the 21 cm flux from the population of low-mass halo
 \end{equation}
 where $n(\vec{x})$ is the halo density and $\overline{n}$ is its Universal mean, as an expansion in the linear matter overdensity, $\delta(\vec{x})$. Above and in the following time dependence is supressed for simplicity but is implicit. The most general expansion consistent with stationarity, up to second order in $\delta(\vec{x})$ and up to two spatial derivatives is
 \begin{equation}
-\delta(\vec{x}) = b_1 \delta(\vec{x}) + b_2 \left( \delta(\vec{x})^2 - \langle \delta^2 \rangle \right)+ b_{\nabla^2\delta} \left( \nabla^2\delta(\vec{x}) - \langle \nabla^2\delta \rangle \right) + b_{s^2} \left( s^2(\vec{x}) - \langle s^2 \rangle \right), \label{general_bias_exp}
+\delta(\vec{x}) = b_1 \delta(\vec{x}) + \frac{b_2}{2} \left( \delta(\vec{x})^2 - \langle \delta^2 \rangle \right)+ b_{\nabla^2\delta} \left( \nabla^2\delta(\vec{x}) - \langle \nabla^2\delta \rangle \right) + b_{s^2} \left( s^2(\vec{x}) - \langle s^2 \rangle \right), \label{general_bias_exp}
 \end{equation}
 where
 \begin{equation}
 s_{ij}(\vec{x}) = \left( \frac{\partial_i \partial_j}{\nabla^2} - \frac{1}{3}\delta^{\rm K}_{ij}\right) \delta(\vec{x}),
 \end{equation}
-is the Lagrangian anisotropic strain tensor, $s^2(\vec{x}) = \sum_{ij} s^2_{ij}(\vec{x})$, angled brackets denote an ensemble average, and $\delta_{ij}^{\rm K}$ is Kronecker delta. The first two $b$s in Eq. \ref{general_bias_exp} are termed local bias parameters, while those associated to spatial derivates are non-local since the derivatives introduce a dependence on the fluctuations in $\delta(\vec{x})$ about the field point in question $\vec{x}$. Several authors have reported significant detections of second (and higher)-order non-local bias parameters in Lagrangian \citep{shethetal2013, biagettietal2014, modietal2017, abidi+baldauf2018} and Eulerian space \cite{lazeyrasetal2017}.
+is the Lagrangian anisotropic strain tensor, $s^2(\vec{x}) = \sum_{ij} s^2_{ij}(\vec{x})$, angled brackets denote an ensemble average, and $\delta_{ij}^{\rm K}$ is Kronecker's delta. The first two $b$s in Eq. \ref{general_bias_exp} are termed local bias parameters, while those associated to spatial derivates are non-local since the derivatives introduce a dependence on the fluctuations in $\delta(\vec{x})$ about the field point in question $\vec{x}$. Several authors have reported significant detections of second (and higher)-order non-local bias parameters in Lagrangian \citep{shethetal2013, biagettietal2014, modietal2017, abidi+baldauf2018} and Eulerian space \cite{lazeyrasetal2017}.
 
-The Peak Background Split (PBS) is a prescription for determining the bias parameters, based on the argument that an initially overdense region should host more halos. In other words, the bias parameters measure the response of the halo density to variations in the underlying continuous field. Indeed, \citeauthor{schmidt2013} show, by defining the PBS in terms of variation of the mean density of the universe (the so-called \textit{separate universe} argument), one obtains precisely the local bias expansion. They then argue that for the case of a universal halo mass function these bias parameters are equivalent to those obtained from a standard variation of the collapse barrier. In this work, we generalize these results to include the non-local bias parameters. We measure the HMF conditionally on the fields $X_i = \{\delta, \delta^2, \nabla^2\delta, s^2\}$ averaged over the halo, and compute the responses marginalized over the other fields,
-\begin{equation}
-b_{X_i}(M_h) = \int_{X_j \neq X_i} \frac{\partial \overline{n}(M_h | X_j)}{\partial X_i},
-\end{equation}
-where the dependence on halo mass $M_h$ is now explicit. We consider each field to be independent, therefore Eq. \ref{general_bias_exp} is a \textit{linear} multivariable Taylor expansion, which explains the non-standard normalization of $b_2$ in Eq. \ref{general_bias_exp}.
+The Peak Background Split (PBS) is a prescription for determining the bias parameters, based on the argument that an initially overdense region should host more halos. In other words, the bias parameters measure the response of the halo density to variations in the underlying continuous field. Indeed, \citeauthor{schmidt2013} show, by defining the PBS in terms of variation of the mean density of the universe (the so-called \textit{separate universe} argument), one obtains precisely the local bias expansion \citep{biasreview}. \citeauthor{modietal2017} then develop a PBS-based estimator for dark matter halo catalogs, and apply it to halos traced back to Lagrangian space from large-scale N-body simulations. Further, they generalize the work of \citeauthor{schmidt2013} to include non-local bias, and find a significant detection of negative $b_{s^2}$ for large mass halos in Lagrangian space. In this work, we are interested in extrapolating measurements of  \citeauthor{modietal2017} to small mass halos. We find the PBS-based estimator a convenient method for doing so, and so develop a slightly modified algorithm allowing us to perform the extrapolation. 
 
-However, it is not known whether a universal expression for the HMF exists, and parametrization attempts suffer, for example, from details of the halo finder used \citep{desjacquesetal2018}. (Attempts to test the PBS on N-body simulations may suffer from such errors as well.) Therefore, in targeting sub-percent accuracy on the HMF, the authors of Ref. \citep{aemulushmf} abandon a universal parametrization and use a Gaussian process model to interpolate between simulations and produce a HMF emulator.
+The algorthim of \citeauthor{modietal2017} proceeds by diving the simulated region, of side length $L$, into smaller boxlets, of side length $l$. The fields in question $\{\delta, \delta^2, s^2\}$ can then be averaged in the boxlets, and the average the number density of halos $N_i(\Delta M)/l^3$, where $N_i(\Delta M)$ is the number of halos in a bin $[M - \Delta M/2, M + \Delta M/2]$ in boxlet $i = 1, \dots, (L/l)^3$, can be measured.The response of this distribution of halo overdensities can then be fit to the relation \ref{general_bias_exp}. Of course $\left\langle \lim_{\Delta M \rightarrow 0} N(\Delta M)/l^3 \right\rangle_l = \frac{\mathrm{d}n}{\mathrm{d}M}(M)$ the halo mass function, where $\langle \rangle_l$ denotes an ensemble average over independent realizations. Therefore, our procedure is to adopt a fitting function for the halo mass function, to be fit to the large mass halo bins in each boxlet from which the low mass bias can be extrapolated.
 
-Gaussian processes are kernel-based methods, providing a Bayesian non-parametric approach for smoothing and interpolation in noisy datasets \citep{rasmussenandwilliams}, but which recently have received increased interest as a supervised machine learning technique capable of feature extraction and extrapolation \citep{wilsonandadams}. A distribution of functions $f(x)$ is a Gaussian process if it is completely described by its mean $m(x) = \langle f(x) \rangle$ and a covariance $\mathrm{cov}[f(x), f(x')] = \left\langle (f(x) - m(x))  (f(x') - m(x')) \right\rangle \equiv k(x, x')$, where $k(x,x')$ is called the covariance function or kernel. For a discrete set of measurements
-\begin{equation}
-\mathbf{y} = f(\mathbf{x}) + n(\mathbf{x}),
-\end{equation}
-where $n(x)$ is additive Gaussian distributed noise with mean 0 and covariance matrix $N_{pq} \equiv \langle n(x_p)n(x_q) \rangle$, the posterior mean at some requested set of points $\mathbf{x}_*$ is just the mean of the distribution conditioned on $\mathbf{y}$,
-\begin{equation}
-\langle f(\mathbf{x}_*) \rangle = m(\mathbf{x}_*) + k(\mathbf{x}_*, \mathbf{x}) \left( k(\mathbf{x}, \mathbf{x}) + N \right)^{-1} \mathbf{y}. \label{conditional_mean}
-\end{equation}
-The only unknown in Eq. \ref{conditional_mean} is the shape of the kernel $k(x, x')$, and so with Gaussian processes the task is to correctly model the covariance and then optimize its free parameters. Furthermore, since $k(x, x')$ is usually chosen to have some simple analytic form, the derivative of Eq. \ref{conditional_mean} with respect to the evaluation points $\mathbf{x}_*$ can be easily calculated as
-\begin{equation}
-\frac{\partial \langle f(\mathbf{x}_*) \rangle}{\partial \mathbf{x}_*} = \frac{\partial m(\mathbf{x}_*)}{\partial \mathbf{x}_*} + \frac{\partial k(\mathbf{x}_*, \mathbf{x})}{\partial \mathbf{x}_*} \left( k(\mathbf{x}, \mathbf{x}) + N \right)^{-1} \mathbf{y}. \label{d_of_cm}
-\end{equation}
+Attempts to parametrize and measure the halo mass function in N-body simulations have met with technical difficulties. Ref. \citep{tinker2008} developped one such parametrization and in Ref. \citep{tinker2010} applied the PBS to compute an analytic expression for $b_1$ in terms of the parameters of the fitting function, but found deviations between this method and a direct fit to the bias at low masses. However, it is now understood that the mass function is sensitive to the halo finder used and futhermore it is not known whether a universal expression for the HMF such as the one sought in Ref. \citep{tinker2008} exists \citep{desjacquesetal2018}. Therefore, in targeting sub-percent accuracy on the HMF, the authors of Ref. \citep{aemulushmf} abandon a universal parametrization and use a Gaussian process model to interpolate between simulations and produce a HMF emulator.
+
+In this work, however, we are not interested in determining a description of the abundance of halos or their response to variations of the background in all cosmologies. We simply wish to adopt a fitting function with enough flexibility to accurately fit the abundance, under changes in the background, of a given single realization. However, the function must not have too much freedom, since this would lead to overfitting and a poor extrapolation. Therefore, we adop the parametrization given in Ref. \citep{aemulushmf},
+\begin{align}
+\frac{\mathrm{d}n}{\mathrm{d}M} = G(\sigma)\frac{\overline{\rho}_m}{M}\frac{\mathrm{d}\ln{\sigma^{-1}}}{\mathrm{d}M},
+\end{align}
+where the multiplicity function
+\begin{align}
+G(\sigma) = B \left[ \left( \frac{\sigma}{e}\right)^{-d} + \sigma^{-f} \right] \exp{\left( -g / \sigma^2 \right)},
+\end{align}
+and $\sigma^2(M)$ is RMS variance of the density field filtered with a top hat filter on scale $R(M)$,
+\begin{align}
+\sigma^2(M) = \int \mathrm{d}\ln{k} \frac{k^3 P(k)}{2\pi^2} \tilde{W}(kR).
+\end{align}
+Indeed, this is a function of $\sigma$ directly and not only the peak height $\nu = \delta_{sc}(z)/\sigma$, where $\delta_{sc}(z)$ is the spherical collapse threshold at redshift $z$ \citep{halomodelreview}, as would be required for a universal HMF. Furthermore, this modifies the treatment of \citep{tinker2008} by adding a second parameter controlling the roll-off of the power law tail of the HMF. Since we measure the HMF in boxlets conditional on the background fields we do not require that all matter resides in halos and leave $B$ a free parameter.
+
+%Gaussian processes are kernel-based methods, providing a Bayesian non-parametric approach for smoothing and interpolation in noisy datasets \citep{rasmussenandwilliams}, but which recently have received increased interest as a supervised machine learning technique capable of feature extraction and extrapolation \citep{wilsonandadams}. A distribution of functions $f(x)$ is a Gaussian process if it is completely described by its mean $m(x) = \langle f(x) \rangle$ and a covariance $\mathrm{cov}[f(x), f(x')] = \left\langle (f(x) - m(x))  (f(x') - m(x')) \right\rangle \equiv k(x, x')$, where $k(x,x')$ is called the covariance function or kernel. For a discrete set of measurements
+%\begin{equation}
+%\mathbf{y} = f(\mathbf{x}) + n(\mathbf{x}),
+%\end{equation}
+%where $n(x)$ is additive Gaussian distributed noise with mean 0 and covariance matrix $N_{pq} \equiv \langle n(x_p)n(x_q) \rangle$, the posterior mean at some requested set of points $\mathbf{x}_*$ is just the mean of the distribution conditioned on $\mathbf{y}$,
+%\begin{equation}
+%\langle f(\mathbf{x}_*) \rangle = m(\mathbf{x}_*) + k(\mathbf{x}_*, \mathbf{x}) \left( k(\mathbf{x}, \mathbf{x}) + N \right)^{-1} \mathbf{y}. \label{conditional_mean}
+%\end{equation}
+%The only unknown in Eq. \ref{conditional_mean} is the shape of the kernel $k(x, x')$, and so with Gaussian processes the task is to correctly model the covariance and then optimize its free parameters. Furthermore, since $k(x, x')$ is usually chosen to have some simple analytic form, the derivative of Eq. \ref{conditional_mean} with respect to the evaluation points $\mathbf{x}_*$ can be easily calculated as
+%\begin{equation}
+%\frac{\partial \langle f(\mathbf{x}_*) \rangle}{\partial \mathbf{x}_*} = \frac{\partial m(\mathbf{x}_*)}{\partial \mathbf{x}_*} + \frac{\partial k(\mathbf{x}_*, \mathbf{x})}{\partial \mathbf{x}_*} \left( k(\mathbf{x}, \mathbf{x}) + N \right)^{-1} \mathbf{y}. \label{d_of_cm}
+%\end{equation}
+
 \section{Simulations}
 \label{ch:signal:sec:sims}
 
-The code modifications described in Section \ref{ch:signal:sec:music} have allowed us to compute a set of high-resolution simulations, targeting $10^9~M_\odot$ halos (following the discussion of Section \ref{ch:signal:sec:intro}), in a cosmological volume. We compute (1024 Mpc)$^3$ periodic cubic boxes at redshifts 0, 1, and 2, on an $8192^3$ grid, with 0.125 Mpc resolution. This results in a 30 cell of halo $1.97 \times 10^{9}~M_\odot$ and 100 cell halo of $6.58 \times 10^{9}~M_\odot$.
-
-\begin{figure}[h!] % not h only
+\begin{figure}[H] % not h only
 \begin{center}
 \includegraphics[width=\textwidth]{figures/subgrid/1Gpc_patchplot_z2_Mcut1e12_10Mpc.png}%
 \caption{A 10 Mpc slice of a 1 Gpc simulation at redshift 2, with 0.125 Mpc resolution. Halos above $10^{12}$ $M_\circ$ are coloured orange.}
@@ -108,9 +119,7 @@ The code modifications described in Section \ref{ch:signal:sec:music} have allow
 \end{center}
 \end{figure}
 
-In Figure \ref{musicdndm}, we show the mass function of the redshift 2 simulation, compared to the \citeauthor{tinker2008} universal HMF, as well as the mass limits mentioned above. We observe a departure from the expected power law behaviour in the tail starting at about $2.5 \times 10^{9}~M_\odot$. However, we see from Figure \ref{f_hi_of_mh} that even a sharp mass cut at this halo mass would resolve within $1-2 \%$ of the 21 cm LIM flux.
-
-\begin{figure}[h!] % not h only
+\begin{figure}[h] % not h only
 \begin{center}
 \includegraphics[width=\textwidth]{figures/subgrid/dndm_1Gpc_8192_z2.png}%
 \caption{The mass function of a 1 Gpc simulation at redshift 2, with 0.125 Mpc resolution.}
@@ -118,20 +127,14 @@ In Figure \ref{musicdndm}, we show the mass function of the redshift 2 simulatio
 \end{center}
 \end{figure}
 
-In Figure \ref{musicslice}, we show a visualization of a thin slice through the entire 1 Gpc simulation volume at redshift 2. 
+The code modifications described in Section \ref{ch:signal:sec:music} have allowed us to compute a set of high-resolution simulations, targeting $10^9~M_\odot$ halos (following the discussion of Section \ref{ch:signal:sec:intro}), in a cosmological volume. We compute (1024 Mpc)$^3$ periodic cubic boxes at redshifts 0, 1, and 2, on an $8192^3$ grid, with 0.125 Mpc resolution. This results in a 30 cell of halo $1.97 \times 10^{9}~M_\odot$ and 100 cell halo of $6.58 \times 10^{9}~M_\odot$. In Figure \ref{musicslice}, we show a visualization of a thin slice through the entire 1 Gpc simulation volume at redshift 2. 
+
+In Figure \ref{musicdndm}, we show the mass function of the redshift 2 simulation, compared to the \citeauthor{tinker2008} universal HMF, as well as the mass limits mentioned above. We observe a departure from the expected power law behaviour in the tail starting at about $2.5 \times 10^{9}~M_\odot$. However, we see from Figure \ref{f_hi_of_mh} that even a sharp mass cut at this halo mass would resolve within $1-2 \%$ of the 21 cm LIM flux.
 
 \section{Results}
 \label{ch:signal:sec:results}
 
 The measurments of the bias parameters.
-
-\begin{figure}[h!] % not h only
-\begin{center}
-\includegraphics[width=\textwidth]{figures/subgrid/gp_fit_dndm.png}%
-\caption{A fit to the mass function using one and two Gaussian processes.}
-\label{gpfit}
-\end{center}
-\end{figure}
 
 \section{Conclusion}
 \label{ch:signal:sec:conclusion}
