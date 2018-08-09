@@ -61,12 +61,12 @@ above has this property. This ensures that the quantityis band diagonal (with wi
 
 Flux calibrating holography measurements requires holographic visibilities of both the source in question and the calibrator, given by\begin{subequations}
 \begin{align}
-V^{\rm src}_{i,{\rm 26}} &= g^{\rm src}_i g^{*{\rm src}}_{\rm 26} A_i(\delta_{\rm src}) A^*_{\rm 26} T_{\rm src} ~~ \left[ {\rm corr~units} \right] \label{holvis1}
+V^{\rm src}_{i,{\rm 26}} &= g^{\rm src}_i g^{*{\rm src}}_{\rm 26} A_i(\delta_{\rm src}) A^*_{\rm 26} T_{\rm src} ~~ \left[ {\rm corr~units} \right] \label{holvis1_app}
 \\ 
-V^{\rm cal}_{i,{\rm 26}} &= g^{\rm cal}_i g^{*{\rm src}}_{\rm 26} A_i(\delta_{\rm cal}) A^*_{\rm 26} T_{\rm cal} ~~  \left[ {\rm corr~units} \right], \label{holvis2}
+V^{\rm cal}_{i,{\rm 26}} &= g^{\rm cal}_i g^{*{\rm src}}_{\rm 26} A_i(\delta_{\rm cal}) A^*_{\rm 26} T_{\rm cal} ~~  \left[ {\rm corr~units} \right], \label{holvis2_app}
 \end{align}
 \end{subequations}
-on boresight. Eqs. \ref{holvis1} and \ref{holvis2} assume that the 26 m's beam is constant with declination, while any of the CHIME antenna beams, indexed by $i=1,\dots,N_{\rm feed}$, may vary. At this stage the units are correlator units. We then divide out the point source gain for the calibrator CHIME transit nearest the holography observation 
+on boresight. Eqs. \ref{holvis1_app} and \ref{holvis2_app} assume that the 26 m's beam is constant with declination, while any of the CHIME antenna beams, indexed by $i=1,\dots,N_{\rm feed}$, may vary. At this stage the units are correlator units. We then divide out the point source gain for the calibrator CHIME transit nearest the holography observation 
 \begin{align}
 g^{\rm cal}_i A_i(\delta_{\rm cal}) T^{1/2}_{\rm cal} ~~  \left[ \frac{\rm corr~units}{\rm Jy} \right]^{1/2}.
 \end{align}
@@ -135,8 +135,8 @@ This can then be applied either to the averaged beam amplitude functions $A_i$  
 \begin{center}
 \includegraphics[scale=.4]{figures/hol_other/cylpic.pdf}
 \caption{The relevant geometry and definitions for the problem of a two dimensional plane wave encountering a parabolic aperture.}
-\end{center}
 \label{cylpic}
+\end{center}
 \end{figure}
 
 Consider a plane electromagnetic wave traveling through free space striking a cylindrical reflector. If the source of the plane wave is directly over head, that is if the angle between the source and the axis of symmetry of the parabola $\theta_i$ is zero, then each wave front reaches the feed in phase after reflecting off the cylinder. Here $i=1,\dots,N$, where $N$ is number angles at which the response to the point source has been sampled. However, invoking the Huygens' Principle, for an angle $\theta_i\neq 0 $, the section of the wave front striking the cylinder at any location $(x_j, y_j)$ will contribute to the signal at the feed. Furthermore it travels a distance $\scripty{r}_{ij}$ which maybe be different from the other sections, since $\vec{\scripty{r}_{ij}} = \vec{R}(\theta_i) + \vec{r}(x_j)$ for $\vec{R}(\theta_i)$ the vector to the source and $\vec{r}(x_j)$ the vector from the focus to the location on the cylinder. The goal, therefore, is to solve for the complex contribution $g_j$ to the response at the feed, from each section of cylinder. The geometry of the parabola constrains
@@ -183,7 +183,7 @@ Here we present an analytic analysis of the noise in interferometers in the pres
 \begin{equation}
 \overline{E}_i(\nu) = E_i(\nu)+ n_i(\nu),
 \end{equation}
-where overbars denote observed quantities. In this section (\ref{app:hol:sec:noise:ss:basecalc}) and the following (\ref{app:hol:sec:noise:ss:basecalcx}), we will neglect any correlations between frequencies or times and so will drop any explicit reference. We are therefore interested only in how the various baselines interact at any one frequency or time. In Section \ref{app:hol:sec:noise:ss:fullcalc} and \ref{app:hol:sec:noise:ss:fullcalcx} we will notice that even the signal component of the data is made up of delayed signals with path differences set by the baselines.
+where overbars denote observed quantities. In this section (\ref{app:hol:sec:noise:ss:basecalc}) and the following (\ref{app:hol:sec:noise:ss:basecalcx}), we will neglect any correlations between frequencies or times and so will drop any explicit reference. We are therefore interested only in how the various baselines interact at any one frequency or time. %In Section \ref{app:hol:sec:noise:ss:fullcalc} and \ref{app:hol:sec:noise:ss:fullcalcx} we will notice that even the signal component of the data is made up of delayed signals with path differences set by the baselines.
 \subsubsection{Signal}
 First, we can construct the two point function of $\overline{E}_i$, the observed visibilities
 \begin{align}
@@ -391,14 +391,14 @@ Here, in Figures \ref{taua_comparison}  and \ref{casa_comparison}, we show the C
 
 \begin{figure}
 \centering
-\includegraphics[width=0.95\textwidth]{figures/pfmaps/taua_avhol_theory_rem_comp.png}
+\includegraphics[width=0.95\textwidth]{figures/pfmaps/taua_avhol_theory_rem_comp.pdf}
 \caption{Cartesian projected Stokes I maps from CHIME Pathfinder pass1-2 night, 25 degrees around the expected location of TauA. The rows correspond to the selected frequencies at 715.62, 683.98, 624.22, and 596.88 Mhz which overlap the night stack and holography beams. The two left and two right columns show the maps made using the holographic and theoretical beams, respectively. The first column in each half shows the standard Wiener filtered map while the second shows the residuals after point source removal.}
 \label{taua_comparison}
 \end{figure}
 
 \begin{figure}
 \centering
-\includegraphics[width=0.95\textwidth]{figures/pfmaps/casa_avhol_theory_rem_comp.png}
+\includegraphics[width=0.95\textwidth]{figures/pfmaps/casa_avhol_theory_rem_comp.pdf}
 \caption{Cartesian projected Stokes I maps from CHIME Pathfinder pass1-2 night, 25 degrees around the expected location of CasA. The rows correspond to the selected frequencies at 715.62, 683.98, 624.22, and 596.88 Mhz which overlap the night stack and holography beams. The two left and two right columns show the maps made using the holographic and theoretical beams, respectively. The first column in each half shows the standard Wiener filtered map while the second shows the residuals after point source removal.}
 \label{casa_comparison}
 \end{figure}
