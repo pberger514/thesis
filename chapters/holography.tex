@@ -190,7 +190,7 @@ After producing intensity beams at each feed and frequency we then have the opti
 \begin{figure}[h!]
 %\vspace{-.1in}
 \begin{center}
-\includegraphics[width=1.0\textwidth]{figures/hol_other/ns_beam_profile_0-4_v2.png}
+\includegraphics[width=1.0\textwidth]{figures/hol_other/ns_beam_profile_0-4_v2_errors.png}
 \caption{The NS profile of the interpolated holography beams (colored lines), compared the two bounce simulated beam (in grey), for four selected frequencies in the first half of the band. We also show the Pathfinder photometry data (points) which are the nodes of the interpolation. \label{nsprof0}}
 \end{center}
 \end{figure}
@@ -198,7 +198,7 @@ After producing intensity beams at each feed and frequency we then have the opti
 \begin{figure}[h!]
 %\vspace{-.1in}
 \begin{center}
-\includegraphics[width=1.0\textwidth]{figures/hol_other/ns_beam_profile_4-8_v2.png}
+\includegraphics[width=1.0\textwidth]{figures/hol_other/ns_beam_profile_4-8_v2_errors.png}
 \caption{The NS profile of the interpolated holography beams (colored lines), compared the two bounce simulated beam (in grey), for four selected frequencies in the second half of the band. We also show the Pathfinder photometry data (points) which are the nodes of the interpolation. \label{nsprof1}}
 \end{center}
 \end{figure}
@@ -207,7 +207,7 @@ Finally, to produce the beam transfer matrices (see Chapter \ref{chap:mapmaking}
 
 The averaged beam amplitude and phase, normalized to TauA at 643 MHz is shown in Figure \ref{example} below. Substantial side lobes are picked up even in the averaged beam. Some artefacts from the linear interpolation out to the horizon are visible, but with low amplitude. We also show the standard deviation across feeds of the amplitude. We see that it is dominated by the variance in the peak response across feeds, except at the location of the TauA where the amplitude is fixed. The variance in the side lobes is dominated by locations where there is data.
 
-In Figures \ref{nsprof0} and \ref{nsprof1}, we show a comparison of the NS profile of the interpolated holography beams and the simulated ideal beam.
+In Figures \ref{nsprof0} and \ref{nsprof1}, we show a comparison of the NS profile of the interpolated holography beams and the simulated ideal beam. The solid coloured lines show the NS profile (a slice at telescope azimuthal angle $\phi_t = 0$) for the two cylinders and their average. The dots are the Pathfinder photometry data to which the peak response of the holography amplitudes are scaled. The error bars are derived from rms of the residuals of the 2D Gaussian photometry fit and the uncertainty in the assumed value of the flux of the source, combined in quadrature. The red data point is TauA, the calibrator source. The grey solid lines are the NS profile of the simulated beam. Data points can be offset from the average holography NS profile since they correspond to the peak response, not the response at $\phi_t = 0$.
 
 Clearly from Figures \ref{nsprof0} and \ref{nsprof1} we see that normalizing the beam at any source declination (in this case TauA, red dot) is a sensitive choice. In general, the interpolation of the Pathfinder photometry appears to be a good fit for an envelope of the simulated beam. However, one can find instances where it appears that the sparse sampling in declination is smoothing the beam shape. This interpretation is in contrast to Figure \ref{example}, where we see that a shifting and scaling of the oscillatory features leads to variance in the peak amplitude, and washes them out in the average beam.
 
