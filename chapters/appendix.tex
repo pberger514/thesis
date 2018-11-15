@@ -17,7 +17,7 @@ For this band-limited signal we can relate the value of the timestream at any ti
 \end{equation}
 However, the interpolation kernel is of infinite length which is problematic computationally,
 so we would like something that is much more local. A common approximation
-is to use the Lanczos interpolation kernel instead, which is essentially a trucated $\mathrm{sinc}$,
+is to use the Lanczos interpolation kernel instead, which is essentially a truncated $\mathrm{sinc}$,
 \begin{align}
 R(x) = \begin{cases}
 \mathrm{sinc}(x)\mathrm{sinc}(x/a) & x<a \\
@@ -37,7 +37,7 @@ can be written as
 \end{align}
 where $\mathbf{R}$ is the interpolation matrix and $\mathbf{N}$ is the additive noise. In our case there are essentially two sources of noise, the thermal noise of the instrument and noise from
 Radio Frequency Interference (RFI), that we denote as $\mathbf{n}_r$. Each of these is described
-by a noise covariance matrix. The thermal noise, which will generally be uncorrelated with a smoothy changing variance is denoted as $\mathbf{N}_t$. Since the RFI is much brighter than the signal, the noise at the locations of flagged RFI is essentailly infinite, and zero elsewhere. Therefore the inverse of the combined noise covariance, $\mathbf{N} = \mathbf{N}_t + \mathbf{N}_r$, as a function of time will have a smoothly varying value along the diagonal except at locations of flagged RFI where it is zero.
+by a noise covariance matrix. The thermal noise, which will generally be uncorrelated with a smoothy changing variance is denoted as $\mathbf{N}_t$. Since the RFI is much brighter than the signal, the noise at the locations of flagged RFI is essentially infinite, and zero elsewhere. Therefore the inverse of the combined noise covariance, $\mathbf{N} = \mathbf{N}_t + \mathbf{N}_r$, as a function of time will have a smoothly varying value along the diagonal except at locations of flagged RFI where it is zero.
 
 We estimate the regularly gridded timestream by computing
 \begin{align}
@@ -47,13 +47,13 @@ where
 \begin{align}
 \mathbf{C} = (\mathbf{S} + \mathbf{R}^T \mathbf{N}^{-1} \mathbf{R})^{-1},
 \end{align}
-is the data covariance matrix. This can be efficiently evaluate under the following assumptions:
+is the data covariance matrix. This can be efficiently evaluated under the following assumptions:
 \begin{itemize}
 \item The noise covariance $\mathbf{N}$ is diagonal.
 \item The signal covariance $\mathbf{S}$ is band diagonal and constant across frequencies and baseline pairs (although the latter assumption is not strictly necessary it is seen to peform well).
 \item The sampling kernel has compact support, such that there is a finite coupling
 length between points in the signal timestream. The Lanczos kernel discussed
-above has this property. This ensures that the quantityis band diagonal (with width 2 elements above and below the diagonal).
+above has this property. This ensures that the quantity is band diagonal (with width 2 elements above and below the diagonal).
 \end{itemize}
 
 \section{Holography-photometry correspondence}
@@ -82,7 +82,7 @@ where in Eq. \ref{cholvis2} we see that the dependence of the CHIME beam at tran
 \begin{align}
 \frac{\overline{V}^{\rm src}_{i,{\rm 26}}}{\overline{V}^{\rm cal}_{i,{\rm 26}}} = \frac{A_i(\delta_{\rm src})}{A_i(\delta_{\rm cal})} \frac{T_{\rm src}}{T_{\rm cal}},
 \end{align}
-a dimensionless quantity. This just means that we have normalized the beams to have amplitude 1 and phase 0 at the peak location of the calibrator. Next, we divide out ratio of the expected source and calibrator fluxes
+a dimensionless quantity. This just means that we have normalized the beams to have amplitude 1 and phase 0 at the peak location of the calibrator. Next, we divide out the ratio of the expected source and calibrator fluxes
 \begin{align}
 \frac{\overline{V}^{\rm src}_{i,{\rm 26}}}{\overline{V}^{\rm cal}_{i,{\rm 26}}} \frac{T_{\rm cal}}{T_{\rm src}} = \frac{A_i(\delta_{\rm src})}{A_i(\delta_{\rm cal})}\equiv \hat{A}_i(\delta_{\rm src} | \delta_{\rm cal}).
 \end{align}
@@ -104,14 +104,14 @@ and for simplicity we then evaluate it at the location of the source
 \begin{align}
 \widetilde{V_{(i-j)}}(\theta_{\rm src}) \propto \sum_{(i-j)} \left\langle \frac{A_i(\delta_{\rm src})}{A_i(\delta_{\rm cal})} \frac{A_j(\delta_{\rm src})}{A_j(\delta_{\rm cal})}^* \right\rangle_{(i-j)} T_{\rm src}. \label{photometry}
 \end{align}
-We see that if $\theta_{\rm cal} = 0$, the phase factors simply cancel and we obtain the average of all the visibilites (after discretizing the Fourier the transform).
+We see that if $\theta_{\rm cal} = 0$, the phase factors simply cancel and we obtain the average of all the visibilites (after discretizing the Fourier transform).
 
-If only intercylinder baselines have been used to create the ring map, after diving by the expected flux of the source this can then be compared to the average cross-cylinder beam obtained from holography
+If only intercylinder baselines have been used to create the ring map, after dividing by the expected flux of the source this can then be compared to the average cross-cylinder beam obtained from holography
 \begin{equation}
-\frac{1}{N_{\rm intercyl}}\sum_{{\rm cyl}_i \ne{\rm cyl}_j}  A_i(\delta_{\rm src} | \delta_{\rm cal})A_j(\delta_{\rm src} | \delta_{\rm cal})^*
+\frac{1}{N_{\rm intercyl}}\sum_{{\rm cyl}_i \ne{\rm cyl}_j}  A_i(\delta_{\rm src} | \delta_{\rm cal})A_j(\delta_{\rm src} | \delta_{\rm cal})^*.
 \end{equation}
 
-\section{A Model of Polarization}
+\section{A Model for Polarization}
 \label{app:hol:sec:polmodel}
 
 To be able to produce beam transfer matrices from intensity-only estimates of the beam, we require a model for the polarized response of the telescope. The beam transfer functions are given by
@@ -179,7 +179,7 @@ To project on to the cylinder we simply invert (\ref{final1d}) to solve for $g_j
 \subsection{Simple baseline-based calculation} 
 \label{app:hol:sec:noise:ss:basecalc}
 
-Here we present an analytic analysis of the noise in interferometers in the presence of cross talk. To gain some intution into the kinds of operations we are dealing with we will first perform the standard calculation with no cross talk, which is heavily based on Ref. \citep{kulkarni}. We begin with a simple model for the voltages obtained at the correlator, which assumes that the received electric field is a just a scalar, and that we observe a simple sum of this signal and thermal noise fluctuations. After the Fourier transform stage of the correlator we have
+Here we present an analytic analysis of the noise in interferometers in the presence of cross talk. To gain some intuition into the kinds of operations we are dealing with we will first perform the standard calculation with no cross talk, which is heavily based on Ref. \citep{kulkarni}. We begin with a simple model for the voltages obtained at the correlator, which assumes that the received electric field is a just a scalar, and that we observe a simple sum of this signal and thermal noise fluctuations. After the Fourier transform stage of the correlator we have
 \begin{equation}
 \overline{E}_i(\nu) = E_i(\nu)+ n_i(\nu),
 \end{equation}
@@ -220,16 +220,16 @@ where $S$ is now the flux of the source. We have obtained the (again well known)
 (i=i', j\neq j') &\rightarrow (S + N)_{i} V_{jj'},
 \\{\rm and~}(i\neq i', j\neq j') &\rightarrow V_{ii'} V^{*}_{jj'}.
 \end{align}
-The take home message here is that for the non-diagonal elements, the covariance drops since the noise no longer correlates, and also by the cross-correlation coefficient, that depends on the correlation properties of the source in question and its signal-to-noise.
+The take-home message here is that for the non-diagonal elements, the covariance drops since the noise no longer correlates, and also by the cross-correlation coefficient, that depends on the correlation properties of the source in question and its signal-to-noise.
 
-\subsection{Cross-talk talk between baselines} 
+\subsection{Cross talk talk between baselines} 
 \label{app:hol:sec:noise:ss:basecalcx}
 
-We would now like to gain some intuition into the kinds of terms that cross-talk can introduce. After the Fourier transform we have,
+We would now like to gain some intuition into the kinds of terms that cross talk can introduce. After the Fourier transform we have,
 \begin{equation}
 \overline{E}_i = E_i + n_i + \sum_{k} \alpha_{ik} (E_i + n_i) {\rm e}^{2\pi i \tau_{ik}}. \label{pre-xtalkmodel}
 \end{equation}
-We have extended the model to include attenuated and delayed versions of the voltages at each other antenna, which depend on the $N_{\rm feed}(N_{\rm feed} + 1)/2$ on attenuation parameters $\alpha_{ik}$ and the $N_{\rm feed}(N_{\rm feed} + 1)/2$ delays $\tau_{ik}$. This seems like a reasonable model -- assuming that the digitized noisy voltages you would have received without cross-talk become delayed and attenuated. However consider the analog chain, there's no reason thermal noise inside some cable can't combine with the signal to reflect off a mismatched impedance and be rebroadcasted before reaching the correlator. This logic would lead to quite a complicated model, though, with delays and parameters for each component that could be contributing noise. For now let's consider a model where we allow different attenuation parameters for the rebroadcasted signal and noise one for each antenna's complete analog chain,
+We have extended the model to include attenuated and delayed versions of the voltages at each other antenna, which depend on the $N_{\rm feed}(N_{\rm feed} + 1)/2$ on attenuation parameters $\alpha_{ik}$ and the $N_{\rm feed}(N_{\rm feed} + 1)/2$ delays $\tau_{ik}$. This seems like a reasonable model -- assuming that the digitized noisy voltages you would have received without cross talk become delayed and attenuated. However consider the analog chain, there's no reason thermal noise inside some cable can't combine with the signal to reflect off a mismatched impedance and be rebroadcasted before reaching the correlator. This logic would lead to quite a complicated model, though, with delays and parameters for each component that could be contributing noise. For now let's consider a model where we allow different attenuation parameters for the rebroadcasted signal and noise one for each antenna's complete analog chain,
 \begin{align}
 \overline{E}_i = E_i + n_i + \sum_{k} \alpha_{ik} E_i {\rm e}^{2\pi i \tau_{\alpha,ik}} + \sum_{k} \beta_{ik} n_i {\rm e}^{2\pi i \tau_{\beta,ik}}. \label{xtalkmodel}
 \end{align}
@@ -248,7 +248,7 @@ We can compute the modification to the visibilities by cross-talk by following t
 \\ \nonumber &+ \widetilde{V}_{ij}
 \\ &+ \widetilde{N}_{ij}. \label{tilde-def}
 \end{align}
-There are two new contributions to Equation \ref{xtalk-signal}, which we have tentatively denoted with tildes to mean ``delayed versions'' of the visibilities and noise, $\widetilde{V}_{ij}$ and $\widetilde{N}_{ij}$, respectively. The first is the addition of delayed and attenuated versions of the visibilities, which for any pair of feeds in the correlation triangle, is a sum over all of their cross-correlations. Secondly we see that in the presence of cross-talk, even cross-correlations can receive a biasing contribution from the system temperature, which results from a feed's own thermal noise fluctuations being broadcast to the others, for later correlation.
+There are two new contributions to Equation \ref{xtalk-signal}, which we have tentatively denoted with tildes to mean ``delayed versions'' of the visibilities and noise, $\widetilde{V}_{ij}$ and $\widetilde{N}_{ij}$, respectively. The first is the addition of delayed and attenuated versions of the visibilities, which for any pair of feeds in the correlation triangle is a sum over all of their cross-correlations. Secondly we see that in the presence of cross-talk, even cross-correlations can receive a biasing contribution from the system temperature, which results from a feed's own thermal noise fluctuations being broadcast to the others, for later correlation.
 
 \subsubsection{Covariance}
 Referring back to Eq. \ref{fullcov-obsvis}, the full covariance of the visibilities can be expressed as a product of the observed visibilities (but with permuted indices),
@@ -387,7 +387,7 @@ The result can similarly be shown for multiplication on the left.
 \section{Point source removal maps with CHIME Pathfinder data}
 \label{app:mm:sec:pfdata}
 
-Here, in Figures \ref{taua_comparison}  and \ref{casa_comparison}, we show the Cartesian projections 25 degrees around the expected locations of TauA and CasA, respectively, for the Stokes I maps from CHIME Pathfinder at the four selected frequencies 715.62, 683.98, 624.22, and 596.88 Mhz included in the analysis of Section \ref{ch:mm:sec:pfdata}.
+Here, in Figures \ref{taua_comparison}  and \ref{casa_comparison}, we show the Cartesian projections 25 degrees around the expected locations of TauA and CasA, respectively, for the Stokes I maps from CHIME Pathfinder at the four selected frequencies 715.62, 683.98, 624.22, and 596.88 MHz included in the analysis of Section \ref{ch:mm:sec:pfdata}.
 
 \begin{figure}
 \centering
@@ -405,4 +405,4 @@ Here, in Figures \ref{taua_comparison}  and \ref{casa_comparison}, we show the C
 
 TauA is the calibrator source, therefore the maps and removal quality are most similar between holography and theory since the visibilities are set to have amplitude 1 and phase 0 for all feeds and frequencies there. Still, we observe for the holographic removed maps that the tracks from TauA through the side-lobes are all but entirely removed.
 
-For CasA, we see the most obvious evidence that frequency dependent effects on the diffuse component have been corrected by the averaged holographic beam in both the base map and removed case. This is clear by inspecting the background surrounding the source as a function of frequency (rows).
+For CasA, we see the most obvious evidence that frequency-dependent effects on the diffuse component have been corrected by the averaged holographic beam in both the base map and removed case. This is clear by inspecting the background surrounding the source as a function of frequency (rows).
